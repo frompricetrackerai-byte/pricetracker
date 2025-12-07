@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
-import getConfig from 'next/config';
+
 
 // Helper to interact with Dodo API
 async function dodoFetch(endpoint: string, apiKey: string) {
