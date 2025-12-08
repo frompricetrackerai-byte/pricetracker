@@ -20,7 +20,7 @@ export default function Sidebar() {
     const pathname = usePathname();
     const { data: session } = useSession();
     const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
-    
+
     // DEBUG: Check what email the session has vs what looks like an admin
     if (session?.user?.email) {
         console.log("Current Session Email:", session.user.email);
@@ -32,11 +32,11 @@ export default function Sidebar() {
     return (
         <div className="flex h-full flex-col px-3 py-4 md:px-2">
             <Link
-                className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
+                className="mb-6 flex h-32 items-end justify-start rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 p-6 shadow-lg shadow-blue-200 transition-transform hover:scale-[1.02]"
                 href="/"
             >
                 <div className="w-32 text-white md:w-40">
-                    <h1 className="text-xl font-bold">Price Tracker AI</h1>
+                    <h1 className="text-xl font-black tracking-tight">Price Tracker AI</h1>
                 </div>
             </Link>
             <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
@@ -47,13 +47,13 @@ export default function Sidebar() {
                             key={link.name}
                             href={link.href}
                             className={cn(
-                                'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
+                                'flex h-[52px] grow items-center justify-center gap-3 rounded-xl bg-white/50 p-3 text-sm font-medium text-slate-600 transition-all hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:shadow-sm md:flex-none md:justify-start md:p-3 md:px-4',
                                 {
-                                    'bg-sky-100 text-blue-600': pathname === link.href,
+                                    'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:from-blue-600 hover:to-indigo-600 hover:text-white': pathname === link.href,
                                 },
                             )}
                         >
-                            <LinkIcon className="w-6" />
+                            <LinkIcon className="w-5" />
                             <p className="hidden md:block">{link.name}</p>
                         </Link>
                     );
@@ -62,26 +62,26 @@ export default function Sidebar() {
                     <Link
                         href="/dashboard/admin"
                         className={cn(
-                            'flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
+                            'flex h-[52px] grow items-center justify-center gap-3 rounded-xl bg-white/50 p-3 text-sm font-medium text-slate-600 transition-all hover:bg-gradient-to-r hover:from-amber-50 hover:to-orange-50 hover:text-amber-700 hover:shadow-sm md:flex-none md:justify-start md:p-3 md:px-4',
                             {
-                                'bg-sky-100 text-blue-600': pathname === '/dashboard/admin',
+                                'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-md hover:from-amber-600 hover:to-orange-600 hover:text-white': pathname === '/dashboard/admin',
                             },
                         )}
                     >
-                        <Shield className="w-6" />
+                        <Shield className="w-5" />
                         <p className="hidden md:block">Admin</p>
                     </Link>
                 )}
                 <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
                 <form
                     action={async () => {
-                        // Client-side sign out
-                        await signOut();
+                        // Client-side sign out with explicit redirect
+                        await signOut({ callbackUrl: '/' });
                     }}
                 >
                     <Button
                         variant="ghost"
-                        className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3"
+                        className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-xl bg-white/50 p-3 text-sm font-medium hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:shadow-sm transition-all md:flex-none md:justify-start md:p-2 md:px-3 text-slate-600"
                     >
                         <LogOut className="w-6" />
                         <div className="hidden md:block">Sign Out</div>

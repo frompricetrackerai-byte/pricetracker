@@ -97,7 +97,7 @@ export default async function NotificationsPage() {
                                 </CardTitle>
                                 <CardDescription>Instant alerts via Bot.</CardDescription>
                             </div>
-                            {!isPremium && <Lock className="h-5 w-5 text-muted-foreground opacity-50" />}
+                            {!isPremium && <Lock className="h-6 w-6 text-amber-500 drop-shadow-sm" />}
                             {isPremium && user.telegramChatId && (
                                 <Badge variant="outline" className="border-green-500 text-green-700 bg-green-50">Connected</Badge>
                             )}
