@@ -75,12 +75,12 @@ export default function SignupForm() {
                     </div>
 
                     <div className="pt-4 flex flex-col gap-4">
-                        <Button className="w-full bg-purple-600 hover:bg-purple-700 h-11 text-base font-semibold shadow-lg shadow-purple-200" disabled={loading}>
+                        <Button className="w-full bg-blue-600 hover:bg-blue-700 h-11 text-base font-semibold shadow-lg shadow-blue-200" disabled={loading}>
                             {loading ? 'Sending OTP...' : 'Create Account'}
                         </Button>
                         <div className="text-center text-sm text-gray-500">
                             Already have an account?{" "}
-                            <Link href="/login" className="font-semibold text-purple-600 hover:text-purple-700">
+                            <Link href="/login" className="font-semibold text-blue-600 hover:text-blue-700">
                                 Sign in
                             </Link>
                         </div>
@@ -103,18 +103,18 @@ export default function SignupForm() {
                                 placeholder="1 2 3 4 5 6"
                                 required
                                 maxLength={6}
-                                className="text-center text-3xl tracking-[1em] h-16 font-mono bg-gray-50 border-gray-200 focus:ring-purple-500 focus:border-purple-500"
+                                className="text-center text-3xl tracking-[1em] h-16 font-mono bg-gray-50 border-gray-200 focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
                     </div>
                     <div className="flex flex-col gap-4">
-                        <Button className="w-full bg-purple-600 hover:bg-purple-700 h-11" disabled={loading}>
+                        <Button className="w-full bg-blue-600 hover:bg-blue-700 h-11" disabled={loading}>
                             {loading ? 'Verifying...' : 'Verify & Create Account'}
                         </Button>
                         <button
                             type="button"
                             onClick={() => setStep('REGISTER')}
-                            className="text-sm underline text-zinc-500 hover:text-purple-600"
+                            className="text-sm underline text-zinc-500 hover:text-blue-600"
                         >
                             Change Email
                         </button>

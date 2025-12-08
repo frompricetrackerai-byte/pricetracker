@@ -20,7 +20,14 @@ export default function SignupPage() {
 
                 {/* Right Side - Blue/Decorative */}
                 <div className="hidden w-1/2 flex-col justify-center bg-blue-600 p-12 text-white md:flex relative overflow-hidden">
-                    <div className="relative z-10 text-center">
+                    {/* One Wave Design */}
+                    <div className="absolute top-0 bottom-0 -left-1 w-24 h-full z-20">
+                        <svg className="h-full w-full text-white fill-current" preserveAspectRatio="none" viewBox="0 0 100 100">
+                            <path d="M0 0 C 40 10 40 90 0 100 Z" />
+                        </svg>
+                    </div>
+
+                    <div className="relative z-10 text-center pl-8">
                         <h2 className="text-4xl font-bold mb-4">Glad to see you!</h2>
                         <p className="text-lg text-blue-100">Welcome! Please fill these blanks for sign up your account.</p>
                     </div>
