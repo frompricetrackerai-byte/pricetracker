@@ -261,23 +261,58 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
             }
         }
 
-        if (!image) {
-            for (const sel of selectors.image) {
-                const imgEl = $(sel);
-                const src = imgEl.attr('src');
-                if (src?.startsWith('http')) {
-                    image = src;
-                    break;
-                }
-            }
+        // ... (Selectors extracted) ...
+
+        // CHECK FOR BLOCKING/CAPTCHA BEFORE RETURNING
+        const isBlocked = title.toLowerCase().includes('robot') ||
+            title.toLowerCase().includes('captcha') ||
+            title.toLowerCase().includes('access denied') ||
+            title.toLowerCase().includes('forbidden');
+
+        if (isBlocked) {
+            console.log('⚠️ Detected CAPTCHA/Block page. Invalidating direct scrape results to force fallback.');
+            priceText = '';
+            jsonLdResult = null;
         }
 
-        // Availability check
-        for (const sel of selectors.outOfStock) {
-            const el = $(sel);
-            if (el.text().toLowerCase().match(/out of stock|sold out|unavailable/)) {
-                isAvailable = false;
-                break;
+        // 3. Jina.ai Reader Fallback (Deep Scraping)
+        // If standard extraction failed to find a price, OR if we were blocked, try Jina.ai
+        if ((!priceText && !jsonLdResult) || isBlocked) {
+            console.log('🚀 Attempting Jina.ai Reader fallback...');
+            try {
+                const jinaUrl = `https://r.jina.ai/${encodeURIComponent(url)}`;
+                const { data: jinaMarkdown } = await axios.get(jinaUrl, {
+                    headers: {
+                        'Authorization': 'Bearer jina_api_key_free', // Placeholder, triggers free tier
+                        'X-Target-Selector': 'body'
+                    },
+                    timeout: 25000
+                });
+
+                // Parse Markdown for Price
+                // Look for patterns like "Price: $12.99" or "$12.99" near keywords
+                const priceMatch = jinaMarkdown.match(/Price:\s*[$€£¥₹]?\s*([\d,.]+)/i) ||
+                    jinaMarkdown.match(/[$€£¥₹]\s*([\d,.]+)/i) ||
+                    jinaMarkdown.match(/(\d+[\d,.]*)\s*(USD|EUR|INR)/i);
+
+                if (priceMatch && priceMatch[1]) {
+                    priceText = priceMatch[1];
+                    console.log('✅ Jina.ai found price:', priceText);
+
+                    // Extract Title from first line or # header if we don't have a good one
+                    const titleMatch = jinaMarkdown.match(/^#\s+(.+)$/m);
+                    if (titleMatch && (!title || isBlocked)) {
+                        title = titleMatch[1];
+                    }
+
+                    // Try to find main image (markdown image syntax)
+                    if (!image) {
+                        const imageMatch = jinaMarkdown.match(/!\[.*?\]\((https?:\/\/.*?)\)/);
+                        if (imageMatch) image = imageMatch[1];
+                    }
+                }
+            } catch (e) {
+                console.error('❌ Jina fallback failed:', e.message);
             }
         }
 
