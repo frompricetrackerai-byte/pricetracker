@@ -16,9 +16,9 @@ const CreateUserSchema = z.object({
 
 export async function createUser(formData: FormData) {
     const session = await auth();
-    // In a real app, use strict role checking here
-    const adminEmail = "admin@example.com";
-    if (session?.user?.email !== adminEmail) {
+    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
+
+    if (!session?.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
         return { error: 'Unauthorized' };
     }
 
@@ -66,8 +66,9 @@ export async function createUser(formData: FormData) {
 
 export async function resetUserPassword(userId: string, newPassword: string) {
     const session = await auth();
-    const adminEmail = "admin@example.com";
-    if (session?.user?.email !== adminEmail) {
+    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
+
+    if (!session?.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
         return { error: 'Unauthorized' };
     }
 
@@ -102,8 +103,9 @@ type UpdateUserData = {
 
 export async function updateUser(userId: string, data: UpdateUserData) {
     const session = await auth();
-    const adminEmail = "admin@example.com";
-    if (session?.user?.email !== adminEmail) {
+    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
+
+    if (!session?.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
         return { error: 'Unauthorized' };
     }
 
@@ -142,4 +144,3 @@ export async function updateUser(userId: string, data: UpdateUserData) {
         return { error: 'Failed to update user. Email might already exist.' };
     }
 }
-
