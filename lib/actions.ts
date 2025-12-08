@@ -5,6 +5,7 @@ import { AuthError } from 'next-auth';
 import { prisma } from '@/lib/db/prisma';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
+import { redirect } from 'next/navigation';
 
 const SignupSchema = z.object({
     email: z.string().email(),
@@ -18,11 +19,15 @@ export async function authenticate(
 ) {
     try {
         console.log("Attempting sign in for:", formData.get('email'));
-        await signIn('credentials', {
+        const result = await signIn('credentials', {
             ...Object.fromEntries(formData),
-            redirectTo: '/dashboard',
+            redirect: false,
         });
-        console.log("Sign in returned (unexpected for redirect)");
+
+        if (result?.error) {
+            console.log("Sign in result error:", result.error);
+            return 'Invalid credentials.';
+        }
     } catch (error) {
         console.log("Sign in error/redirect:", error);
         if (error instanceof AuthError) {
@@ -35,6 +40,9 @@ export async function authenticate(
         }
         throw error;
     }
+
+    // Manual redirect after successful login
+    redirect('/dashboard');
 }
 
 export async function signup(prevState: string | undefined, formData: FormData) {
