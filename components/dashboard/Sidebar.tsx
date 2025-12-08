@@ -73,10 +73,12 @@ export default function Sidebar() {
                     </Link>
                 )}
                 <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
-                <form
-                    action={async () => {
-                        // Client-side sign out with explicit redirect
-                        await signOut({ callbackUrl: '/' });
+                <button
+                    className="w-full"
+                    onClick={async () => {
+                        // Client-side sign out with explicit redirect to custom domain
+                        await signOut({ redirect: false });
+                        window.location.href = 'https://pricetracker.store/';
                     }}
                 >
                     <Button
@@ -86,7 +88,7 @@ export default function Sidebar() {
                         <LogOut className="w-6" />
                         <div className="hidden md:block">Sign Out</div>
                     </Button>
-                </form>
+                </button>
             </div>
         </div>
     );

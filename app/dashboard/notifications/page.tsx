@@ -63,7 +63,7 @@ export default async function NotificationsPage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
                 {/* Email Channel */}
-                <Card className={`relative overflow-hidden border-0 shadow-lg transition-transform hover:scale-[1.02] ${user.emailNotifications ? 'bg-gradient-to-br from-blue-500 to-cyan-500 text-white' : 'bg-white'}`}>
+                <Card className={`relative overflow-hidden border-0 shadow-lg transition-transform hover:scale-[1.02] ${user.emailNotifications ? 'bg-gradient-to-br from-blue-400 to-blue-600 text-white' : 'bg-white'}`}>
                     {user.emailNotifications && <div className="absolute top-0 right-0 p-4 opacity-10"><Mail className="w-24 h-24" /></div>}
                     <CardHeader className="pb-3">
                         <div className="flex justify-between items-start">
@@ -88,8 +88,8 @@ export default async function NotificationsPage() {
                 </Card>
 
                 {/* Telegram Channel (Premium) */}
-                <Card className={`relative overflow-hidden border-0 shadow-lg transition-transform hover:scale-[1.02] ${user.telegramChatId ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white' : 'bg-white border-l-4 border-l-blue-400'}`}>
-                    {user.telegramChatId && <div className="absolute top-0 right-0 p-4 opacity-10"><Send className="w-24 h-24" /></div>}
+                <Card className={`relative overflow-hidden border-0 shadow-lg transition-transform hover:scale-[1.02] ${user.telegramChatId ? 'bg-gradient-to-br from-sky-400 to-blue-500 text-white' : 'bg-white border-l-4 border-l-sky-400'}`}>
+                    {user.telegramChatId && <div className="absolute top-0 right-0 p-4 opacity-10"><Send className="w-24 h-24 rotate-[-10deg]" /></div>}
                     <CardHeader className="pb-3 relative z-10">
                         <div className="flex justify-between items-start">
                             <div className="space-y-1">
@@ -120,19 +120,21 @@ export default async function NotificationsPage() {
                 </Card>
 
                 {/* Whatsapp (Coming Soon) */}
-                <Card className="shadow-sm border-dashed opacity-70">
-                    <CardHeader className="pb-3">
+                {/* Whatsapp (Coming Soon) */}
+                <Card className="relative overflow-hidden border-0 shadow-sm border-dashed transition-transform hover:scale-[1.02] bg-gradient-to-br from-green-400 to-emerald-600 opacity-90 text-white">
+                    <div className="absolute top-0 right-0 p-4 opacity-10"><MessageSquare className="w-24 h-24" /></div>
+                    <CardHeader className="pb-3 relative z-10">
                         <div className="flex justify-between items-start">
                             <div className="space-y-1">
-                                <CardTitle className="flex items-center gap-2 text-base text-muted-foreground">
-                                    <MessageSquare className="h-5 w-5" /> WhatsApp
+                                <CardTitle className="flex items-center gap-2 text-base text-white">
+                                    <MessageSquare className="h-5 w-5 fill-current" /> WhatsApp
                                 </CardTitle>
-                                <CardDescription>Coming Soon</CardDescription>
+                                <CardDescription className="text-green-50">Coming Soon</CardDescription>
                             </div>
                         </div>
                     </CardHeader>
-                    <CardContent>
-                        <Button variant="ghost" disabled className="w-full">Unavailable</Button>
+                    <CardContent className="relative z-10">
+                        <Button variant="secondary" disabled className="w-full bg-white/20 text-white hover:bg-white/30 border-0">Unavailable</Button>
                     </CardContent>
                 </Card>
             </div>
