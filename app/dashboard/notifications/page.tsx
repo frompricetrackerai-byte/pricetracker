@@ -63,7 +63,6 @@ export default async function NotificationsPage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
                 {/* Email Channel */}
-                {/* Email Channel */}
                 <Card className={`relative overflow-hidden border-0 shadow-lg transition-transform hover:scale-[1.02] ${user.emailNotifications ? 'bg-gradient-to-br from-blue-500 to-cyan-500 text-white' : 'bg-white'}`}>
                     {user.emailNotifications && <div className="absolute top-0 right-0 p-4 opacity-10"><Mail className="w-24 h-24" /></div>}
                     <CardHeader className="pb-3">
@@ -75,18 +74,16 @@ export default async function NotificationsPage() {
                                 <CardDescription className={user.emailNotifications ? 'text-blue-100' : ''}>Free for everyone.</CardDescription>
                             </div>
                             <form action={async () => { 'use server'; await toggleNotification('email', !user.emailNotifications); }}>
-                                <form action={async () => { 'use server'; await toggleNotification('email', !user.emailNotifications); }}>
-                                    <Switch checked={user.emailNotifications} type="submit" className="data-[state=checked]:bg-white/20 data-[state=checked]:border-white" />
-                                </form>
+                                <Switch checked={user.emailNotifications} type="submit" className="data-[state=checked]:bg-white/20 data-[state=checked]:border-white" />
+                            </form>
                         </div>
                     </CardHeader>
                     <CardContent>
                         <form action={async () => { 'use server'; await sendTestNotification('email'); }}>
-                            <form action={async () => { 'use server'; await sendTestNotification('email'); }}>
-                                <Button variant={user.emailNotifications ? "secondary" : "outline"} size="sm" className={`w-full ${user.emailNotifications ? 'bg-white/20 text-white hover:bg-white/30 border-0' : 'text-sky-700 hover:text-sky-800 hover:bg-sky-100'}`} disabled={!user.emailNotifications}>
-                                    Test Email
-                                </Button>
-                            </form>
+                            <Button variant={user.emailNotifications ? "secondary" : "outline"} size="sm" className={`w-full ${user.emailNotifications ? 'bg-white/20 text-white hover:bg-white/30 border-0' : 'text-sky-700 hover:text-sky-800 hover:bg-sky-100'}`} disabled={!user.emailNotifications}>
+                                Test Email
+                            </Button>
+                        </form>
                     </CardContent>
                 </Card>
 
@@ -102,7 +99,6 @@ export default async function NotificationsPage() {
                                 </CardTitle>
                                 <CardDescription className={user.telegramChatId ? 'text-green-50' : ''}>Instant alerts via Bot.</CardDescription>
                             </div>
-                            {!isPremium && <Lock className="h-6 w-6 text-amber-500 drop-shadow-sm" />}
                             {!isPremium && <Lock className="h-6 w-6 text-amber-500 drop-shadow-sm" />}
                             {isPremium && user.telegramChatId && (
                                 <Badge variant="outline" className="border-white/50 text-white bg-white/20">Connected</Badge>
