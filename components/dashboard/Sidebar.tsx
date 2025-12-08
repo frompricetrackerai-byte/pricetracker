@@ -19,7 +19,14 @@ const links = [
 export default function Sidebar() {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const ADMIN_EMAILS = ['admin@example.com', 'saravanavenkatachalam@gmail.com'];
+    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
+    
+    // DEBUG: Check what email the session has vs what looks like an admin
+    if (session?.user?.email) {
+        console.log("Current Session Email:", session.user.email);
+        console.log("Is Admin?", ADMIN_EMAILS.includes(session.user.email));
+    }
+
     const isAdmin = session?.user?.email && ADMIN_EMAILS.includes(session.user.email);
 
     return (

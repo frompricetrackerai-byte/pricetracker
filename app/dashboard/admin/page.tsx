@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export default async function AdminUsersPage() {
     const session = await auth()
 
-    const ADMIN_EMAILS = ['admin@example.com', 'saravanavenkatachalam@gmail.com'];
+    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
     if (session?.user?.email && !ADMIN_EMAILS.includes(session.user.email)) {
         redirect("/dashboard");
     }
