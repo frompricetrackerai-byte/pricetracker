@@ -12,8 +12,14 @@ export const authConfig = {
             if (isOnDashboard) {
                 if (isLoggedIn) return true;
                 if (isLoggedIn) return true;
-                const loginUrl = new URL('/login', nextUrl);
-                loginUrl.searchParams.set('callbackUrl', nextUrl.toString());
+
+                // Use AUTH_URL if set, otherwise fall back to request origin
+                // This prevents localhost redirects if the environment variable is correctly set
+                const baseUrl = process.env.AUTH_URL || nextUrl.origin;
+                const loginUrl = new URL('/login', baseUrl);
+
+                // Ensure callback URL is also correct
+                loginUrl.searchParams.set('callbackUrl', nextUrl.href);
                 return Response.redirect(loginUrl);
             } else if (isLoggedIn) {
                 // Redirect authenticated users to dashboard if they visit login/signup
