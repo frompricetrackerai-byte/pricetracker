@@ -10,7 +10,7 @@ const globalForPrisma = globalThis as unknown as {
 // Create a Postgres pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
+  ssl: { rejectUnauthorized: false }, // Enable SSL for both Local (Supabase) and Prod
 })
 // Create the adapter
 const adapter = new PrismaPg(pool)
