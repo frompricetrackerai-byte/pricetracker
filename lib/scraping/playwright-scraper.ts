@@ -312,7 +312,7 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
                     }
                 }
             } catch (e) {
-                console.error('❌ Jina fallback failed:', e.message);
+                console.error('❌ Jina fallback failed:', (e as any).message);
             }
         }
 
