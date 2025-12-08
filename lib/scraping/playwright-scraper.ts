@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio';
 
 // Global E-commerce Scraper - Vercel Compatible (Cheerio + Axios)
 // Updated: 2025-12-09
+// Features: JSON-LD, __NEXT_DATA__ (Walmart), OGP/Meta Tags, Stealth Headers
 
 export interface ScrapedProduct {
     title: string;
@@ -73,7 +74,7 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
         ];
         const randomUserAgent = userAgents[Math.floor(Math.random() * userAgents.length)];
 
-        // Extensive headers to mimic a real browser
+        // Extensive headers to mimic a real browser (Stealth Mode)
         const { data } = await axios.get(url, {
             headers: {
                 'User-Agent': randomUserAgent,
@@ -89,49 +90,72 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
                 'Cache-Control': 'max-age=0',
                 'Connection': 'keep-alive'
             },
-            timeout: 20000, // Increased timeout
+            timeout: 20000,
             maxRedirects: 5
         });
 
         const $ = cheerio.load(data);
-
-        // 1. Try JSON-LD Schema.org (Checking for stored JSON in script tags)
         let jsonLdResult: any = null;
+
+        // Strategy A: JSON-LD Schema.org
         $('script[type="application/ld+json"]').each((_, el) => {
             try {
-                if (jsonLdResult) return; // Found one already
+                if (jsonLdResult) return;
                 const json = JSON.parse($(el).html() || '{}');
 
                 // Direct Product type
-                if (json['@type'] === 'Product') {
-                    jsonLdResult = json;
-                    return;
-                }
+                if (json['@type'] === 'Product') { jsonLdResult = json; return; }
 
                 // Array of objects
                 if (Array.isArray(json)) {
                     const product = json.find(item => item['@type'] === 'Product');
-                    if (product) {
-                        jsonLdResult = product;
-                        return;
-                    }
+                    if (product) { jsonLdResult = product; return; }
                 }
 
                 // @graph structure
                 if (json['@graph']) {
                     const product = json['@graph'].find((item: any) => item['@type'] === 'Product');
-                    if (product) {
-                        jsonLdResult = product;
-                        return;
-                    }
+                    if (product) { jsonLdResult = product; return; }
                 }
 
             } catch (e) { }
         });
 
+        // Strategy B: __NEXT_DATA__ (Walmart/Next.js sites)
+        // Helps bypass blocked UI by reading internal state
+        if (!jsonLdResult) {
+            try {
+                const nextDataHtml = $('script#__NEXT_DATA__').html();
+                if (nextDataHtml) {
+                    const nextData = JSON.parse(nextDataHtml);
+                    // Standard Walmart/Next.js structure
+                    const initialData = nextData?.props?.pageProps?.initialData || nextData?.props?.pageProps?.data;
+
+                    if (initialData?.product?.priceInfo?.currentPrice?.price) {
+                        const wProduct = initialData.product;
+                        jsonLdResult = {
+                            name: wProduct.name,
+                            offers: {
+                                price: wProduct.priceInfo.currentPrice.price,
+                                priceCurrency: wProduct.priceInfo.currentPrice.currency || currency,
+                                availability: wProduct.availabilityStatus === 'IN_STOCK' ? 'InStock' : 'OutOfStock'
+                            },
+                            image: wProduct.imageInfo?.thumbnailUrl || wProduct.imageInfo?.primaryAsset?.url
+                        };
+                        console.log('✅ Extracted from __NEXT_DATA__');
+                    }
+                }
+            } catch (e) { }
+        }
+
+
         if (jsonLdResult) {
             const offer = Array.isArray(jsonLdResult.offers) ? jsonLdResult.offers[0] : jsonLdResult.offers;
-            if (offer?.price) {
+
+            // Check for simple price or high/low price range
+            const finalPrice = offer?.price || offer?.highPrice || offer?.lowPrice;
+
+            if (finalPrice) {
                 const imageUrl = jsonLdResult.image
                     ? (Array.isArray(jsonLdResult.image) ? jsonLdResult.image[0] : jsonLdResult.image)
                     : '';
@@ -139,10 +163,10 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
                 // Handle image object structure
                 const finalImage = typeof imageUrl === 'object' ? imageUrl.url : imageUrl;
 
-                console.log('✅ JSON-LD extraction successful');
+                console.log('✅ JSON-LD/__NEXT_DATA__ extraction successful');
                 return {
                     title: jsonLdResult.name || 'Unknown Product',
-                    price: parseFloat(String(offer.price).replace(/[^0-9.]/g, '')),
+                    price: parseFloat(String(finalPrice).replace(/[^0-9.]/g, '')),
                     currency: offer.priceCurrency || currency,
                     imageUrl: finalImage,
                     isAvailable: offer.availability?.includes('InStock') ?? true,
@@ -151,17 +175,23 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
         }
 
 
-        // 2. Store-specific and generic fallback using Cheerio selectors
+        // 2. Fallback: Universal Meta Tags & Selectors
         const getMeta = (name: string) =>
             $(`meta[property="${name}"]`).attr('content') ||
             $(`meta[name="${name}"]`).attr('content');
 
+        // Universal Price Extraction (OGP/Schema tags)
+        const metaPrice = getMeta('product:price:amount') || getMeta('og:price:amount') || getMeta('price');
+        let priceText = metaPrice || '';
+
+        if (metaPrice) console.log('✅ Found price in OGP Metadata');
+
         let title = getMeta('og:title') || $('title').text() || 'Unknown Product';
         let image = getMeta('og:image') || getMeta('twitter:image') || '';
-        let priceText = '';
         let isAvailable = true;
 
-        // Store-specific selectors
+
+        // Store-specific selectors (Only needed if metadata fails)
         const SELECTORS: Record<string, { price: string[], title: string[], image: string[], outOfStock: string[] }> = {
             amazon: {
                 price: ['.a-price-whole', '#priceblock_ourprice', '#priceblock_dealprice', '.a-price .a-offscreen', '#corePrice_feature_div .a-price-whole'],
@@ -224,12 +254,14 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
             }
         }
 
-        for (const sel of selectors.price) {
-            const el = $(sel);
-            const text = el.text() || el.attr('content');
-            if (text) {
-                priceText = text;
-                break;
+        if (!priceText) {
+            for (const sel of selectors.price) {
+                const el = $(sel);
+                const text = el.text() || el.attr('content');
+                if (text) {
+                    priceText = text;
+                    break;
+                }
             }
         }
 
