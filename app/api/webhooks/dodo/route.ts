@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
-import { revalidateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(request: Request) {
     console.log("Webhook: Received Dodo Event");
@@ -34,8 +34,9 @@ export async function POST(request: Request) {
                     },
                 });
 
-                // Invalidate the subscription cache for this user
-                revalidateTag(`user-subscription-${customerEmail}`);
+                // Invalidate the subscription cache
+                // Using revalidatePath to ensure dashboard matches new status
+                revalidatePath('/', 'layout');
 
                 console.log(`Webhook: Successfully upgraded ${customerEmail}`);
                 return NextResponse.json({ received: true });
