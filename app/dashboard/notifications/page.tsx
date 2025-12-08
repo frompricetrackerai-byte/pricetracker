@@ -94,14 +94,13 @@ export default async function NotificationsPage() {
                         <div className="flex justify-between items-start">
                             <div className="space-y-1">
                                 <CardTitle className="flex items-center gap-2 text-base">
-                                    <CardTitle className="flex items-center gap-2 text-base">
-                                        <svg className="h-5 w-5 text-white fill-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M21.613 3.525c-1.632.735-8.856 3.737-12.04 5.053-.404.167-.56.287-.58.455-.035.25.326.33.68.428l1.79.56 4.14 4.095c.5.495.426.71.65.65.297-.08.646-.35 1.488-1.16 2.304-2.22 2.65-2.613 2.92-2.613.06 0 .085.02.085.085 0 .034-.02.07-.107.126-1.053.71-4.874 3.32-5.46 3.73-.59.41-1.134.78-1.894.757-.768-.023-2.185-.436-3.235-.776-1.285-.417-2.316-.62-2.213-1.31.053-.35.485-.71 1.285-1.05C18.667 3.67 21.057 2.68 21.613 3.525z" fill="currentColor" stroke="none" />
-                                        </svg>
-                                        Telegram
-                                        {isPremium && <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-800 border-amber-200">Best</Badge>}
-                                    </CardTitle>
-                                    <CardDescription className={user.telegramChatId ? 'text-green-50' : ''}>Instant alerts via Bot.</CardDescription>
+                                    <svg className="h-5 w-5 text-white fill-current" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M21.613 3.525c-1.632.735-8.856 3.737-12.04 5.053-.404.167-.56.287-.58.455-.035.25.326.33.68.428l1.79.56 4.14 4.095c.5.495.426.71.65.65.297-.08.646-.35 1.488-1.16 2.304-2.22 2.65-2.613 2.92-2.613.06 0 .085.02.085.085 0 .034-.02.07-.107.126-1.053.71-4.874 3.32-5.46 3.73-.59.41-1.134.78-1.894.757-.768-.023-2.185-.436-3.235-.776-1.285-.417-2.316-.62-2.213-1.31.053-.35.485-.71 1.285-1.05C18.667 3.67 21.057 2.68 21.613 3.525z" fill="currentColor" stroke="none" />
+                                    </svg>
+                                    Telegram
+                                    {isPremium && <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-800 border-amber-200">Best</Badge>}
+                                </CardTitle>
+                                <CardDescription className={user.telegramChatId ? 'text-green-50' : ''}>Instant alerts via Bot.</CardDescription>
                             </div>
                             {!isPremium && <Lock className="h-6 w-6 text-amber-500 drop-shadow-sm" />}
                             {isPremium && user.telegramChatId && (
