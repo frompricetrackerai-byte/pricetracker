@@ -84,7 +84,7 @@ export default function LandingPage() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 w-full justify-center pt-4">
-                <Link href="/dashboard">
+                <Link href="/login">
                   <Button size="lg" className="h-14 px-8 text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-xl shadow-blue-500/20 transition-all hover:scale-105 hover:shadow-blue-500/40 rounded-full group">
                     Start Tracking Now
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
