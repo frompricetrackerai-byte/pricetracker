@@ -66,6 +66,13 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
 
         console.log(`🛒 Scraping ${store} product (Lightweight), currency: ${currency}`);
 
+        // Rotate User Agents
+        const userAgents = [
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36'
+        ];
+
         // Mobile User Agent for Walmart (often weaker anti-bot)
         const isWalmart = store === 'walmart';
         const mobileUserAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1';
