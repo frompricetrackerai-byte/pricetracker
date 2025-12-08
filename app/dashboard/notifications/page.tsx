@@ -9,6 +9,7 @@ import { Bell, Mail, Lock } from 'lucide-react';
 import { toggleNotification, sendTestNotification } from './actions';
 import ContactDetails from './ContactDetails';
 import Link from 'next/link';
+import { TestEmailButton } from '@/components/dashboard/TestEmailButton';
 import { TelegramConnectButton } from './TelegramConnectButton';
 
 export const dynamic = 'force-dynamic';
@@ -79,11 +80,7 @@ export default async function NotificationsPage() {
                         </div>
                     </CardHeader>
                     <CardContent>
-                        <form action={async () => { 'use server'; await sendTestNotification('email'); }}>
-                            <Button variant={user.emailNotifications ? "secondary" : "outline"} size="sm" className={`w-full ${user.emailNotifications ? 'bg-white/20 text-white hover:bg-white/30 border-0' : 'text-sky-700 hover:text-sky-800 hover:bg-sky-100'}`} disabled={!user.emailNotifications}>
-                                Test Email
-                            </Button>
-                        </form>
+                        <TestEmailButton emailNotificationsEnabled={user.emailNotifications} />
                     </CardContent>
                 </Card>
 
