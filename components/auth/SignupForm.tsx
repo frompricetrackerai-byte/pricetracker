@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { registerUser, verifyOtpAndLogin } from '@/app/actions/auth-actions';
 import { useRouter } from 'next/navigation';
@@ -14,8 +13,7 @@ export default function SignupForm() {
     const [step, setStep] = useState<'REGISTER' | 'VERIFY'>('REGISTER');
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState(''); // Keep password to auto-login if verify works (?)
-    // Actually, verifies just marks verified. We can redirect to login.
+    const [password, setPassword] = useState('');
 
     const router = useRouter();
 
@@ -48,85 +46,81 @@ export default function SignupForm() {
     }
 
     return (
-        <Card className="w-full">
-            <CardHeader>
-                <CardTitle>{step === 'REGISTER' ? 'Sign Up' : 'Verify Email'}</CardTitle>
-                <CardDescription>
-                    {step === 'REGISTER'
-                        ? 'Create an account to start tracking prices'
-                        : `Enter the 6-digit code sent to ${email}`}
-                </CardDescription>
-            </CardHeader>
-
+        <div className="w-full">
             {step === 'REGISTER' ? (
-                <form action={handleRegister}>
-                    <CardContent className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Name</Label>
-                            <Input id="name" name="name" placeholder="John Doe" required />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input id="email" name="email" type="email" placeholder="m@example.com" required />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                name="password"
-                                type="password"
-                                required
-                                minLength={6}
-                                onChange={(e) => setPassword(e.target.value)}
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="mobile">Mobile (Optional)</Label>
-                            <Input id="mobile" name="mobile" type="tel" placeholder="+91 9876543210" />
-                        </div>
-                    </CardContent>
-                    <CardFooter className="flex flex-col gap-4">
-                        <Button className="w-full" disabled={loading}>
-                            {loading ? 'Sending OTP...' : 'Sign Up'}
+                <form action={handleRegister} className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input id="name" name="name" placeholder="John Doe" required className="bg-gray-50 border-gray-200 focus:bg-white transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" name="email" type="email" placeholder="m@example.com" required className="bg-gray-50 border-gray-200 focus:bg-white transition-all" />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="password">Password</Label>
+                        <Input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            minLength={6}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="bg-gray-50 border-gray-200 focus:bg-white transition-all"
+                        />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="mobile">Mobile (Optional)</Label>
+                        <Input id="mobile" name="mobile" type="tel" placeholder="+91 9876543210" className="bg-gray-50 border-gray-200 focus:bg-white transition-all" />
+                    </div>
+
+                    <div className="pt-4 flex flex-col gap-4">
+                        <Button className="w-full bg-purple-600 hover:bg-purple-700 h-11 text-base font-semibold shadow-lg shadow-purple-200" disabled={loading}>
+                            {loading ? 'Sending OTP...' : 'Create Account'}
                         </Button>
-                        <div className="text-center text-sm">
+                        <div className="text-center text-sm text-gray-500">
                             Already have an account?{" "}
-                            <Link href="/login" className="underline">
-                                Login
+                            <Link href="/login" className="font-semibold text-purple-600 hover:text-purple-700">
+                                Sign in
                             </Link>
                         </div>
-                    </CardFooter>
+                    </div>
                 </form>
             ) : (
-                <form action={handleVerify}>
-                    <CardContent className="space-y-4">
+                <form action={handleVerify} className="space-y-6">
+                    <div className="space-y-4">
+                        <div className="text-center mb-6">
+                            <h3 className="text-xl font-semibold">Verify Email</h3>
+                            <p className="text-sm text-gray-500">Enter code sent to {email}</p>
+                        </div>
+
                         <div className="space-y-2">
-                            <Label htmlFor="otp">Enter OTP</Label>
+                            <Label htmlFor="otp" className="sr-only">Enter OTP</Label>
                             <Input
                                 id="otp"
                                 name="otp"
                                 type="text"
-                                placeholder="123456"
+                                placeholder="1 2 3 4 5 6"
                                 required
                                 maxLength={6}
-                                className="text-center text-2xl tracking-widest"
+                                className="text-center text-3xl tracking-[1em] h-16 font-mono bg-gray-50 border-gray-200 focus:ring-purple-500 focus:border-purple-500"
                             />
                         </div>
-                    </CardContent>
-                    <CardFooter className="flex flex-col gap-4">
-                        <Button className="w-full" disabled={loading}>
+                    </div>
+                    <div className="flex flex-col gap-4">
+                        <Button className="w-full bg-purple-600 hover:bg-purple-700 h-11" disabled={loading}>
                             {loading ? 'Verifying...' : 'Verify & Create Account'}
                         </Button>
                         <button
                             type="button"
                             onClick={() => setStep('REGISTER')}
-                            className="text-sm underline text-zinc-500"
+                            className="text-sm underline text-zinc-500 hover:text-purple-600"
                         >
                             Change Email
                         </button>
-                    </CardFooter>
+                    </div>
                 </form>
             )}
-        </Card>
+        </div>
     );
 }

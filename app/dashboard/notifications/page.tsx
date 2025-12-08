@@ -63,43 +63,49 @@ export default async function NotificationsPage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
 
                 {/* Email Channel */}
-                <Card className={`shadow-md hover:shadow-lg transition-all ${user.emailNotifications ? 'border-sky-200 bg-sky-50/30' : ''}`}>
+                {/* Email Channel */}
+                <Card className={`relative overflow-hidden border-0 shadow-lg transition-transform hover:scale-[1.02] ${user.emailNotifications ? 'bg-gradient-to-br from-blue-500 to-cyan-500 text-white' : 'bg-white'}`}>
+                    {user.emailNotifications && <div className="absolute top-0 right-0 p-4 opacity-10"><Mail className="w-24 h-24" /></div>}
                     <CardHeader className="pb-3">
                         <div className="flex justify-between items-start">
-                            <div className="space-y-1">
+                            <div className="space-y-1 relative z-10">
                                 <CardTitle className="flex items-center gap-2 text-base">
-                                    <Mail className="h-5 w-5 text-sky-600" /> Email
+                                    <Mail className={`h-5 w-5 ${user.emailNotifications ? 'text-white' : 'text-sky-600'}`} /> Email
                                 </CardTitle>
-                                <CardDescription>Free for everyone.</CardDescription>
+                                <CardDescription className={user.emailNotifications ? 'text-blue-100' : ''}>Free for everyone.</CardDescription>
                             </div>
                             <form action={async () => { 'use server'; await toggleNotification('email', !user.emailNotifications); }}>
-                                <Switch checked={user.emailNotifications} type="submit" className="data-[state=checked]:bg-sky-600" />
-                            </form>
+                                <form action={async () => { 'use server'; await toggleNotification('email', !user.emailNotifications); }}>
+                                    <Switch checked={user.emailNotifications} type="submit" className="data-[state=checked]:bg-white/20 data-[state=checked]:border-white" />
+                                </form>
                         </div>
                     </CardHeader>
                     <CardContent>
                         <form action={async () => { 'use server'; await sendTestNotification('email'); }}>
-                            <Button variant="outline" size="sm" className="w-full text-sky-700 hover:text-sky-800 hover:bg-sky-100" disabled={!user.emailNotifications}>
-                                Test Email
-                            </Button>
-                        </form>
+                            <form action={async () => { 'use server'; await sendTestNotification('email'); }}>
+                                <Button variant={user.emailNotifications ? "secondary" : "outline"} size="sm" className={`w-full ${user.emailNotifications ? 'bg-white/20 text-white hover:bg-white/30 border-0' : 'text-sky-700 hover:text-sky-800 hover:bg-sky-100'}`} disabled={!user.emailNotifications}>
+                                    Test Email
+                                </Button>
+                            </form>
                     </CardContent>
                 </Card>
 
                 {/* Telegram Channel (Premium) */}
-                <Card className={`shadow-md hover:shadow-lg transition-all border-l-4 ${user.telegramChatId ? 'border-l-green-500 border-green-100 bg-green-50/20' : 'border-l-blue-400'}`}>
-                    <CardHeader className="pb-3">
+                <Card className={`relative overflow-hidden border-0 shadow-lg transition-transform hover:scale-[1.02] ${user.telegramChatId ? 'bg-gradient-to-br from-green-500 to-emerald-600 text-white' : 'bg-white border-l-4 border-l-blue-400'}`}>
+                    {user.telegramChatId && <div className="absolute top-0 right-0 p-4 opacity-10"><Send className="w-24 h-24" /></div>}
+                    <CardHeader className="pb-3 relative z-10">
                         <div className="flex justify-between items-start">
                             <div className="space-y-1">
                                 <CardTitle className="flex items-center gap-2 text-base">
-                                    <Send className="h-5 w-5 text-[#0088cc]" /> Telegram
+                                    <Send className={`h-5 w-5 ${user.telegramChatId ? 'text-white' : 'text-[#0088cc]'}`} /> Telegram
                                     {isPremium && <Badge variant="secondary" className="text-xs bg-amber-100 text-amber-800 border-amber-200">Best</Badge>}
                                 </CardTitle>
-                                <CardDescription>Instant alerts via Bot.</CardDescription>
+                                <CardDescription className={user.telegramChatId ? 'text-green-50' : ''}>Instant alerts via Bot.</CardDescription>
                             </div>
                             {!isPremium && <Lock className="h-6 w-6 text-amber-500 drop-shadow-sm" />}
+                            {!isPremium && <Lock className="h-6 w-6 text-amber-500 drop-shadow-sm" />}
                             {isPremium && user.telegramChatId && (
-                                <Badge variant="outline" className="border-green-500 text-green-700 bg-green-50">Connected</Badge>
+                                <Badge variant="outline" className="border-white/50 text-white bg-white/20">Connected</Badge>
                             )}
                         </div>
                     </CardHeader>

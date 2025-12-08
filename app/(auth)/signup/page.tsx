@@ -7,15 +7,28 @@ export const metadata: Metadata = {
 
 export default function SignupPage() {
     return (
-        <main className="flex items-center justify-center md:h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-            <div className="relative mx-auto flex w-full max-w-[400px] flex-col space-y-2.5 p-4 md:-mt-32">
-                <div className="flex w-full items-end rounded-2xl bg-gradient-to-r from-blue-600 to-purple-600 p-6 shadow-xl shadow-blue-200 md:h-36 mb-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <div className="w-32 text-white md:w-36">
-                        <h1 className="text-2xl font-black tracking-tighter drop-shadow-md">Price Tracker AI</h1>
+        <main className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+            <div className="flex w-full max-w-4xl overflow-hidden rounded-3xl bg-white shadow-2xl md:h-[600px]">
+                {/* Left Side - Form */}
+                <div className="flex w-full flex-col justify-center p-8 md:w-1/2 md:p-12">
+                    <div className="mb-8 text-center md:text-left">
+                        <h1 className="text-3xl font-bold text-gray-900">Hello, Friend!</h1>
+                        <p className="mt-2 text-gray-600">Create your account to start tracking.</p>
                     </div>
-                </div>
-                <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-white/50 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
                     <SignupForm />
+                </div>
+
+                {/* Right Side - Purple Cloud/Decorative */}
+                <div className="hidden w-1/2 flex-col justify-center bg-gradient-to-br from-purple-600 to-indigo-600 p-12 text-white md:flex relative overflow-hidden">
+                    <div className="relative z-10 text-center">
+                        <h2 className="text-4xl font-bold mb-4">Glad to see you!</h2>
+                        <p className="text-lg text-purple-100">Welcome! Please fill these blanks for sign up your account.</p>
+                    </div>
+
+                    {/* Decorative Clouds (CSS Shapes) */}
+                    <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-purple-500/30 blur-3xl"></div>
+                    <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-indigo-500/30 blur-3xl"></div>
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-full w-full bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
                 </div>
             </div>
         </main>
