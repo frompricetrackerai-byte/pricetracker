@@ -25,6 +25,15 @@ export async function POST(request: Request) {
         return NextResponse.json({ error: 'Missing email or planId' }, { status: 400 });
     }
 
+    // Use the origin from the request if possible, otherwise fallback to env
+    let baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    try {
+        const url = new URL(request.url);
+        baseUrl = url.origin;
+    } catch (e) {
+        // Fallback to env
+    }
+
     const payload = {
         product_cart: [
             {
@@ -39,7 +48,7 @@ export async function POST(request: Request) {
             email: email,
         },
         payment_link: true, // Generate a link
-        return_url: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/dashboard/billing?success=true`,
+        return_url: `${baseUrl}/dashboard/billing?success=true`,
     };
 
     try {

@@ -19,7 +19,8 @@ const links = [
 export default function Sidebar() {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const isAdmin = session?.user?.email === 'admin@example.com';
+    const ADMIN_EMAILS = ['admin@example.com', 'saravanavenkatachalam@gmail.com'];
+    const isAdmin = session?.user?.email && ADMIN_EMAILS.includes(session.user.email);
 
     return (
         <div className="flex h-full flex-col px-3 py-4 md:px-2">

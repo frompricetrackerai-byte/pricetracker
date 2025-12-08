@@ -10,9 +10,9 @@ export const dynamic = 'force-dynamic';
 export default async function AdminUsersPage() {
     const session = await auth()
 
-    const adminEmail = "admin@example.com"
-    if (session?.user?.email !== adminEmail) {
-        // For now, let's allow access for debugging
+    const ADMIN_EMAILS = ['admin@example.com', 'saravanavenkatachalam@gmail.com'];
+    if (session?.user?.email && !ADMIN_EMAILS.includes(session.user.email)) {
+        redirect("/dashboard");
     }
 
     const users = await prisma.user.findMany({
