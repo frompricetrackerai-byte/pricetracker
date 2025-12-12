@@ -263,8 +263,8 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
                 const pwResult = await scrapeWithPlaywright(url);
                 if (pwResult && pwResult.price > 0) return pwResult;
 
-                console.log('🔄 Playwright failed/blocked. Switching to Oxylabs (Premium Fallback)...');
-                return await scrapeWithOxylabs(url);
+                console.log('🔄 Playwright failed/blocked. Returning null...');
+                return null;
             }
 
             // If main fetch fails, we can still fall through to Jina or return null
@@ -522,11 +522,7 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
         // --- Final Check: If Price is still 0, try Heavy Scraping for specific stores ---
         if ((!price || price === 0) && (store === 'myntra' || store === 'flipkart' || store === 'amazon' || store === 'etsy')) {
             console.log(`⚠️ Price is 0 for ${store} after lightweight scraping. Triggering Heavy Scraping Fallback...`);
-            const pwResult = await scrapeWithPlaywright(url);
-            if (pwResult && pwResult.price > 0) return pwResult;
-
-            console.log('🔄 Playwright also failed. Trying Oxylabs...');
-            return await scrapeWithOxylabs(url);
+            return await scrapeWithPlaywright(url);
         }
         // -------------------------------------------------------------------------------
 

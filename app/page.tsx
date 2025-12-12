@@ -266,7 +266,7 @@ export default function LandingPage() {
                   </li>
                   <li className="flex items-center text-gray-600">
                     <CheckCircle2 className="h-5 w-5 text-green-500 mr-3" />
-                    Hourly price checks
+                    Daily price checks
                   </li>
                   <li className="flex items-center text-gray-600">
                     <CheckCircle2 className="h-5 w-5 text-green-500 mr-3" />
@@ -301,7 +301,7 @@ export default function LandingPage() {
                   </li>
                   <li className="flex items-center text-gray-600">
                     <CheckCircle2 className="h-5 w-5 text-blue-600 mr-3" />
-                    <span className="font-semibold text-gray-900">15-minute price checks</span>
+                    <span className="font-semibold text-gray-900">12-hour price checks</span>
                   </li>
                   <li className="flex items-center text-gray-600">
                     <CheckCircle2 className="h-5 w-5 text-blue-600 mr-3" />
