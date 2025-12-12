@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
     return {
         rules: {
             userAgent: '*',
-            allow: '/',
+            allow: ['/', '/amazon-price-tracker', '/flipkart-price-tracker', '/myntra-price-tracker', '/ajio-price-tracker'],
             disallow: ['/admin/', '/dashboard/'],
         },
         sitemap: `${baseUrl}/sitemap.xml`,

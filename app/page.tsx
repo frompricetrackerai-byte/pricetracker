@@ -139,21 +139,21 @@ export default function LandingPage() {
             </p>
             <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
               {/* Amazon */}
-              <div className="flex items-center gap-2 font-bold text-xl text-gray-800">
+              <Link href="/amazon-price-tracker" className="flex items-center gap-2 font-bold text-xl text-gray-800 hover:text-[#FF9900] transition-colors">
                 <span className="text-[#FF9900]">Amazon</span>
-              </div>
+              </Link>
               {/* Flipkart */}
-              <div className="flex items-center gap-2 font-bold text-xl text-gray-800">
+              <Link href="/flipkart-price-tracker" className="flex items-center gap-2 font-bold text-xl text-gray-800 hover:text-[#2874F0] transition-colors">
                 <span className="text-[#2874F0]">Flipkart</span>
-              </div>
+              </Link>
               {/* Myntra */}
-              <div className="flex items-center gap-2 font-bold text-xl text-gray-800">
+              <Link href="/myntra-price-tracker" className="flex items-center gap-2 font-bold text-xl text-gray-800 hover:text-[#E40046] transition-colors">
                 <span className="text-[#E40046]">Myntra</span>
-              </div>
+              </Link>
               {/* Ajio */}
-              <div className="flex items-center gap-2 font-bold text-xl text-gray-800">
+              <Link href="/ajio-price-tracker" className="flex items-center gap-2 font-bold text-xl text-gray-800 hover:text-[#2C4152] transition-colors">
                 <span className="text-[#2C4152]">Ajio</span>
-              </div>
+              </Link>
               {/* Croma */}
               <div className="flex items-center gap-2 font-bold text-xl text-gray-800">
                 <span className="text-[#00BFA5]">Croma</span>
