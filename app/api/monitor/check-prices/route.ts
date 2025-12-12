@@ -8,8 +8,8 @@ const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT),
     auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
+        user: process.env.SMTP_EMAIL || process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD || process.env.SMTP_PASS,
     },
 });
 
@@ -72,7 +72,7 @@ async function checkPrices() {
                     if (product.user.emailNotifications && product.user.email) {
                         try {
                             await transporter.sendMail({
-                                from: process.env.SMTP_FROM,
+                                from: process.env.SMTP_EMAIL || process.env.SMTP_FROM,
                                 to: product.user.email,
                                 subject: `Price Drop Alert: ${product.title}`,
                                 html: `

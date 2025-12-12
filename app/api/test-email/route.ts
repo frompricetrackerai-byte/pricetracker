@@ -9,14 +9,14 @@ export async function GET() {
             port: Number(process.env.SMTP_PORT),
             secure: false, // true for 465, false for other ports
             auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS,
+                user: process.env.SMTP_EMAIL || process.env.SMTP_USER,
+                pass: process.env.SMTP_PASSWORD || process.env.SMTP_PASS,
             },
         });
 
         const mailOptions = {
-            from: process.env.SMTP_FROM,
-            to: process.env.SMTP_USER, // Send to self
+            from: process.env.SMTP_EMAIL || process.env.SMTP_FROM,
+            to: process.env.SMTP_EMAIL || process.env.SMTP_USER, // Send to self
             subject: 'Price Tracker AI - Test Email',
             html: `
                 <h1>It Works!</h1>

@@ -51,14 +51,14 @@ export async function sendTestNotification(type: 'email' | 'whatsapp' | 'sms') {
                 port: Number(process.env.SMTP_PORT),
                 secure: false,
                 auth: {
-                    user: process.env.SMTP_USER,
-                    pass: process.env.SMTP_PASS,
+                    user: process.env.SMTP_EMAIL || process.env.SMTP_USER,
+                    pass: process.env.SMTP_PASSWORD || process.env.SMTP_PASS,
                 },
             });
 
             if (user.email) {
                 await transporter.sendMail({
-                    from: process.env.SMTP_FROM,
+                    from: process.env.SMTP_EMAIL || process.env.SMTP_FROM,
                     to: user.email,
                     subject: 'Test Notification - Price Tracker AI',
                     html: `
