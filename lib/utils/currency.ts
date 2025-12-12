@@ -17,7 +17,7 @@ export const CURRENCIES: Record<string, CurrencyConfig> = {
         code: 'USD',
         symbol: '$',
         locale: 'en-US',
-        conversionRate: 0.012, // 1 INR ≈ 0.012 USD
+        conversionRate: 0.0111, // 1 INR ≈ 0.0111 USD (User specified: 499 INR ≈ 5.52 USD)
     },
     EUR: {
         code: 'EUR',

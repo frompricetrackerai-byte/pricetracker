@@ -64,7 +64,7 @@ export default function BillingCards({ isPremium, serverCurrency }: BillingCards
                             <Check className="mr-2 h-4 w-4 text-green-500" /> Track up to 3 products
                         </li>
                         <li className="flex items-center">
-                            <Check className="mr-2 h-4 w-4 text-green-500" /> Hourly checks
+                            <Check className="mr-2 h-4 w-4 text-green-500" /> Automated price updates
                         </li>
                         <li className="flex items-center">
                             <Check className="mr-2 h-4 w-4 text-green-500" /> Email alerts
@@ -115,7 +115,7 @@ export default function BillingCards({ isPremium, serverCurrency }: BillingCards
                             <Check className="mr-2 h-4 w-4 text-green-500" /> Track up to 100 products
                         </li>
                         <li className="flex items-center">
-                            <Check className="mr-2 h-4 w-4 text-green-500" /> 15-minute checks
+                            <Check className="mr-2 h-4 w-4 text-green-500" /> Faster price updates
                         </li>
                         <li className="flex items-center">
                             <Check className="mr-2 h-4 w-4 text-green-500" /> Priority alerts

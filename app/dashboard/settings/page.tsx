@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import { useTheme } from "next-themes";
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,6 +10,15 @@ import Link from 'next/link';
 
 export default function SettingsPage() {
     const { setTheme, theme } = useTheme();
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return <div className="p-8">Loading settings...</div>; // Or return null to render nothing until mounted
+    }
 
     return (
         <div className="container max-w-4xl mx-auto p-4 md:p-8 space-y-8">
