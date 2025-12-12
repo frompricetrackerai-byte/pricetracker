@@ -256,7 +256,7 @@ export default function LandingPage() {
                   <p className="text-gray-500 text-sm mt-1">Perfect for casual shoppers</p>
                 </div>
                 <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">₹0</span>
+                  <span className="text-4xl font-bold text-gray-900">$0</span>
                   <span className="text-gray-500">/month</span>
                 </div>
                 <ul className="space-y-4 mb-8 flex-1">
@@ -266,7 +266,7 @@ export default function LandingPage() {
                   </li>
                   <li className="flex items-center text-gray-600">
                     <CheckCircle2 className="h-5 w-5 text-green-500 mr-3" />
-                    Daily price checks
+                    Automated price updates
                   </li>
                   <li className="flex items-center text-gray-600">
                     <CheckCircle2 className="h-5 w-5 text-green-500 mr-3" />
@@ -289,8 +289,8 @@ export default function LandingPage() {
                 </div>
                 <div className="mb-6">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold text-gray-900">₹499</span>
-                    <span className="text-gray-400 line-through text-lg">₹999</span>
+                    <span className="text-4xl font-bold text-gray-900">$5</span>
+                    <span className="text-gray-400 line-through text-lg">$10</span>
                   </div>
                   <span className="text-gray-500">/month</span>
                 </div>
@@ -301,7 +301,7 @@ export default function LandingPage() {
                   </li>
                   <li className="flex items-center text-gray-600">
                     <CheckCircle2 className="h-5 w-5 text-blue-600 mr-3" />
-                    <span className="font-semibold text-gray-900">12-hour price checks</span>
+                    <span className="font-semibold text-gray-900">Faster price updates</span>
                   </li>
                   <li className="flex items-center text-gray-600">
                     <CheckCircle2 className="h-5 w-5 text-blue-600 mr-3" />
