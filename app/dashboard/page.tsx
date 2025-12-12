@@ -57,7 +57,7 @@ export default async function DashboardPage() {
         },
         include: {
             product: {
-                select: { title: true }
+                select: { title: true, currency: true }
             }
         },
         orderBy: { sentAt: 'desc' },
@@ -68,13 +68,31 @@ export default async function DashboardPage() {
 
     // Parse price drop details from notification messages
     const priceDrops = priceDropNotifications.map(n => {
-        const match = n.message.match(/₹([\d,]+) to ₹([\d,]+)/);
+        // Match currency symbol followed by numbers (with commas)
+        const match = n.message.match(/([₹$€£¥])([\d,]+) to ([₹$€£¥])([\d,]+)/) || n.message.match(/([\d,]+) to ([\d,]+)/);
+
+        let oldPrice = 0;
+        let newPrice = 0;
+
+        if (match) {
+            // If we matched symbols (4 capture groups), numbers are at 2 and 4
+            if (match.length >= 5) {
+                oldPrice = parseInt(match[2].replace(/,/g, ''));
+                newPrice = parseInt(match[4].replace(/,/g, ''));
+            } else {
+                // No symbols (2 capture groups), numbers at 1 and 2
+                oldPrice = parseInt(match[1].replace(/,/g, ''));
+                newPrice = parseInt(match[2].replace(/,/g, ''));
+            }
+        }
+
         return {
             id: n.id,
             productTitle: n.product?.title || 'Unknown Product',
-            oldPrice: match ? parseInt(match[1].replace(/,/g, '')) : 0,
-            newPrice: match ? parseInt(match[2].replace(/,/g, '')) : 0,
-            droppedAt: n.sentAt
+            oldPrice,
+            newPrice,
+            droppedAt: n.sentAt,
+            currency: n.product?.currency || 'INR' // Pass the currency
         };
     });
 
@@ -85,6 +103,7 @@ export default async function DashboardPage() {
             id: true,
             title: true,
             currentPrice: true,
+            currency: true,
             priceHistory: {
                 orderBy: { checkedAt: 'asc' },
                 take: 1,
@@ -94,7 +113,7 @@ export default async function DashboardPage() {
     });
 
     let totalSaved = 0;
-    const savingsBreakdown: { id: string; title: string | null; initialPrice: number; currentPrice: number; saved: number }[] = [];
+    const savingsBreakdown: { id: string; title: string | null; initialPrice: number; currentPrice: number; saved: number; currency: string }[] = [];
 
     allProducts.forEach(p => {
         if (p.currentPrice && p.priceHistory.length > 0) {
@@ -108,7 +127,8 @@ export default async function DashboardPage() {
                     title: p.title,
                     initialPrice: initial,
                     currentPrice: current,
-                    saved
+                    saved,
+                    currency: p.currency
                 });
             }
         }
@@ -122,6 +142,14 @@ export default async function DashboardPage() {
     const daysRemaining = user.subscriptionEndDate
         ? Math.ceil((new Date(user.subscriptionEndDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
         : null;
+
+    const getCurrencySymbol = (currency: string = 'INR') => {
+        const symbols: Record<string, string> = {
+            'USD': '$', 'EUR': '€', 'GBP': '£', 'INR': '₹',
+            'CAD': 'C$', 'AUD': 'A$', 'JPY': '¥', 'SGD': 'S$', 'MYR': 'RM'
+        };
+        return symbols[currency] || currency;
+    };
 
     return (
         <main className="space-y-8 p-6 bg-slate-50/50 min-h-screen">
@@ -270,14 +298,14 @@ export default async function DashboardPage() {
                                             <div>
                                                 <p className="text-xs text-gray-500 mb-0.5">Current Price</p>
                                                 <div className="text-2xl font-black text-gray-900">
-                                                    {product.currentPrice ? `₹${product.currentPrice.toString()}` : 'Checking...'}
+                                                    {product.currentPrice ? `${getCurrencySymbol(product.currency)}${product.currentPrice.toString()}` : 'Checking...'}
                                                 </div>
                                             </div>
                                             {product.alertThreshold && product.currentPrice && (
                                                 <div className="text-right">
                                                     <p className="text-xs text-gray-500 mb-0.5">Target</p>
                                                     <div className="text-sm font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
-                                                        ₹{product.alertThreshold.toString()}
+                                                        {getCurrencySymbol(product.currency)}{product.alertThreshold.toString()}
                                                     </div>
                                                 </div>
                                             )}

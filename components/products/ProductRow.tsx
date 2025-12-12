@@ -25,6 +25,16 @@ export default function ProductRow({ product }: ProductRowProps) {
     const percentDiff = current > 0 && target > 0 ? Math.abs((diff / current) * 100).toFixed(1) : null;
     const isSavings = diff > 0;
 
+    const getCurrencySymbol = (currency: string) => {
+        const symbols: Record<string, string> = {
+            'USD': '$', 'EUR': '€', 'GBP': '£', 'INR': '₹',
+            'CAD': 'C$', 'AUD': 'A$', 'JPY': '¥', 'SGD': 'S$', 'MYR': 'RM'
+        };
+        return symbols[currency] || currency; // Return symbol or code if unknown
+    };
+
+    const currencySymbol = getCurrencySymbol(product.currency || 'INR');
+
     return (
         <>
             <div className="group relative flex flex-col md:flex-row items-start md:items-center gap-3 p-3 bg-gradient-to-r from-white via-blue-50/30 to-purple-50/30 border border-gray-200 rounded-xl shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 hover:scale-[1.01]">
@@ -64,11 +74,11 @@ export default function ProductRow({ product }: ProductRowProps) {
                     <div className="text-right">
                         <div className="text-xs text-gray-500 mb-1">Current Price</div>
                         <div className="text-xl md:text-2xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-purple-900 bg-clip-text text-transparent group-hover:from-blue-600 group-hover:via-purple-600 group-hover:to-pink-600 transition-all duration-300">
-                            ₹{current.toLocaleString()}
+                            {currencySymbol}{current.toLocaleString()}
                         </div>
                         {(product.initialPrice || product.priceHistory?.[0]?.price) && (
                             <div className="text-xs text-gray-400 mb-1">
-                                Initial: ₹{Number(product.initialPrice || product.priceHistory?.[0]?.price).toLocaleString()}
+                                Initial: {currencySymbol}{Number(product.initialPrice || product.priceHistory?.[0]?.price).toLocaleString()}
                             </div>
                         )}
                         <div className="text-xs flex items-center justify-end gap-1 flex-wrap">
@@ -76,7 +86,7 @@ export default function ProductRow({ product }: ProductRowProps) {
                                 <>
                                     <span className="text-gray-600">Target:</span>
                                     <span className={`font-bold ${isSavings ? 'text-green-600' : 'text-orange-600'}`}>
-                                        ₹{target}
+                                        {currencySymbol}{target}
                                     </span>
                                     {percentDiff && (
                                         <span className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-md text-[10px] font-bold shadow-sm ${isSavings ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700' : 'bg-gradient-to-r from-orange-100 to-red-100 text-orange-700'}`}>

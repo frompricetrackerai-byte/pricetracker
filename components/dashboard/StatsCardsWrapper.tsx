@@ -10,6 +10,7 @@ interface SavingsData {
     initialPrice: number;
     currentPrice: number;
     saved: number;
+    currency?: string;
 }
 
 interface NotificationData {
@@ -25,6 +26,7 @@ interface PriceDropData {
     oldPrice: number;
     newPrice: number;
     droppedAt: Date;
+    currency?: string;
 }
 
 interface StatsCardsWrapperProps {
@@ -54,6 +56,14 @@ export default function StatsCardsWrapper({
     const [alertIndex, setAlertIndex] = useState(0);
     const [priceDropIndex, setPriceDropIndex] = useState(0);
     const [savingsIndex, setSavingsIndex] = useState(0);
+
+    const getCurrencySymbol = (currency: string = 'INR') => {
+        const symbols: Record<string, string> = {
+            'USD': '$', 'EUR': '€', 'GBP': '£', 'INR': '₹',
+            'CAD': 'C$', 'AUD': 'A$', 'JPY': '¥', 'SGD': 'S$', 'MYR': 'RM'
+        };
+        return symbols[currency] || currency;
+    };
 
     const handleCardClick = (card: ExpandedCard) => {
         setExpandedCard(expandedCard === card ? null : card);
@@ -194,8 +204,12 @@ export default function StatsCardsWrapper({
                             </button>
                             <div className="flex-1 p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100">
                                 <p className="text-base font-medium text-gray-800">{currentPriceDrop?.productTitle}</p>
-                                <p className="text-sm text-gray-500 mt-1">₹{currentPriceDrop?.oldPrice.toLocaleString('en-IN')} → ₹{currentPriceDrop?.newPrice.toLocaleString('en-IN')}</p>
-                                <p className="text-lg font-bold text-green-600 mt-2">Saved ₹{((currentPriceDrop?.oldPrice || 0) - (currentPriceDrop?.newPrice || 0)).toLocaleString('en-IN')}</p>
+                                <p className="text-sm text-gray-500 mt-1">
+                                    {getCurrencySymbol(currentPriceDrop?.currency)}{currentPriceDrop?.oldPrice.toLocaleString()} → {getCurrencySymbol(currentPriceDrop?.currency)}{currentPriceDrop?.newPrice.toLocaleString()}
+                                </p>
+                                <p className="text-lg font-bold text-green-600 mt-2">
+                                    Saved {getCurrencySymbol(currentPriceDrop?.currency)}{((currentPriceDrop?.oldPrice || 0) - (currentPriceDrop?.newPrice || 0)).toLocaleString()}
+                                </p>
                             </div>
                             <button onClick={() => setPriceDropIndex(prev => prev < priceDrops.length - 1 ? prev + 1 : 0)}
                                 className="p-3 rounded-full bg-purple-100 hover:bg-purple-200 text-purple-600 disabled:opacity-50" disabled={priceDrops.length <= 1}>
@@ -219,8 +233,12 @@ export default function StatsCardsWrapper({
                             </button>
                             <div className="flex-1 p-4 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-xl border border-orange-100">
                                 <p className="text-base font-medium text-gray-800">{currentSaving?.title || 'Untitled'}</p>
-                                <p className="text-sm text-gray-500 mt-1">₹{currentSaving?.initialPrice.toLocaleString('en-IN')} → ₹{currentSaving?.currentPrice.toLocaleString('en-IN')}</p>
-                                <p className="text-lg font-bold text-green-600 mt-2">Saved ₹{currentSaving?.saved.toLocaleString('en-IN')}</p>
+                                <p className="text-sm text-gray-500 mt-1">
+                                    {getCurrencySymbol(currentSaving?.currency)}{currentSaving?.initialPrice.toLocaleString()} → {getCurrencySymbol(currentSaving?.currency)}{currentSaving?.currentPrice.toLocaleString()}
+                                </p>
+                                <p className="text-lg font-bold text-green-600 mt-2">
+                                    Saved {getCurrencySymbol(currentSaving?.currency)}{currentSaving?.saved.toLocaleString()}
+                                </p>
                             </div>
                             <button onClick={() => setSavingsIndex(prev => prev < savingsBreakdown.length - 1 ? prev + 1 : 0)}
                                 className="p-3 rounded-full bg-orange-100 hover:bg-orange-200 text-orange-600 disabled:opacity-50" disabled={savingsBreakdown.length <= 1}>

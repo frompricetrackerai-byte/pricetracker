@@ -73,22 +73,18 @@ export default function Sidebar() {
                     </Link>
                 )}
                 <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
-                <button
-                    className="w-full"
+                <Button
+                    variant="ghost"
+                    className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-xl bg-white/50 p-3 text-sm font-medium hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:shadow-sm transition-all md:flex-none md:justify-start md:p-2 md:px-3 text-slate-600"
                     onClick={async () => {
                         // Client-side sign out with explicit redirect to custom domain
                         await signOut({ redirect: false });
                         window.location.href = 'https://pricetracker.store/';
                     }}
                 >
-                    <Button
-                        variant="ghost"
-                        className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-xl bg-white/50 p-3 text-sm font-medium hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:shadow-sm transition-all md:flex-none md:justify-start md:p-2 md:px-3 text-slate-600"
-                    >
-                        <LogOut className="w-6" />
-                        <div className="hidden md:block">Sign Out</div>
-                    </Button>
-                </button>
+                    <LogOut className="w-6" />
+                    <div className="hidden md:block">Sign Out</div>
+                </Button>
             </div>
         </div>
     );

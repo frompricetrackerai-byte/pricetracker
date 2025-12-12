@@ -39,8 +39,8 @@ export default async function ProductsPage() {
                 <div className="flex gap-2">
                     <CheckPricesButton />
                     <Link href="/dashboard/products/add">
-                        <Button>
-                            <Plus className="mr-2 h-4 w-4" /> Add Product
+                        <Button className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-6 shadow-md transition-all">
+                            <Plus className="mr-2 h-5 w-5" /> Add Product
                         </Button>
                     </Link>
                 </div>

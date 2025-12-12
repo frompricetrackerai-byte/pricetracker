@@ -10,14 +10,19 @@ import { Link2, Loader2, Rocket, AlertCircle } from 'lucide-react';
 
 export default function AddProductForm() {
     const [url, setUrl] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [status, setStatus] = useState<'idle' | 'analyzing' | 'collecting' | 'success'>('idle');
     const [error, setError] = useState('');
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
+        setStatus('analyzing');
         setError('');
+
+        // Fake stage transition for analyzing -> collecting
+        const collectingTimer = setTimeout(() => {
+            if (status !== 'success') setStatus('collecting');
+        }, 2000);
 
         try {
             const res = await fetch('/api/products/add', {
@@ -32,18 +37,58 @@ export default function AddProductForm() {
                 throw new Error(data.error || 'Failed to add product');
             }
 
-            router.push('/dashboard');
-            router.refresh();
+            clearTimeout(collectingTimer);
+            setStatus('success'); // Green success state
+
+            // Allow user to see success message before redirecting
+            setTimeout(() => {
+                router.push('/dashboard');
+                router.refresh();
+            }, 1000);
+
         } catch (err: any) {
+            clearTimeout(collectingTimer);
+            setStatus('idle');
             setError(err.message);
-        } finally {
-            setLoading(false);
+        }
+    };
+
+    const getButtonContent = () => {
+        switch (status) {
+            case 'analyzing':
+                return (
+                    <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Analyzing...
+                    </>
+                );
+            case 'collecting':
+                return (
+                    <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Collecting product details...
+                    </>
+                );
+            case 'success':
+                return (
+                    <>
+                        <svg className="w-6 h-6 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                        Added Successfully!
+                    </>
+                );
+            default:
+                return (
+                    <>
+                        <Rocket className="mr-2 h-5 w-5" />
+                        Track Product
+                    </>
+                );
         }
     };
 
     return (
         <Card className="border-2 border-purple-200 shadow-xl bg-gradient-to-br from-white via-purple-50/30 to-blue-50/30 overflow-hidden relative">
-            {/* Decorative elements */}
+            {/* ... keep decorative elements ... */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-200 to-pink-200 rounded-bl-full opacity-50 -mr-8 -mt-8"></div>
             <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-blue-200 to-cyan-200 rounded-tr-full opacity-50 -ml-6 -mb-6"></div>
 
@@ -81,21 +126,16 @@ export default function AddProductForm() {
                 </CardContent>
                 <CardFooter className="relative z-10">
                     <Button
-                        disabled={loading}
+                        disabled={status !== 'idle'}
                         type="submit"
-                        className="w-full py-6 text-base font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl"
+                        className={`w-full py-6 text-base font-bold shadow-lg transition-all duration-300 rounded-xl
+                            ${status === 'success'
+                                ? 'bg-green-500 hover:bg-green-600 outline-none ring-2 ring-green-300'
+                                : 'bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 hover:shadow-xl'
+                            }
+                        `}
                     >
-                        {loading ? (
-                            <>
-                                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                Analyzing & Adding...
-                            </>
-                        ) : (
-                            <>
-                                <Rocket className="mr-2 h-5 w-5" />
-                                Track Product
-                            </>
-                        )}
+                        {getButtonContent()}
                     </Button>
                 </CardFooter>
             </form>

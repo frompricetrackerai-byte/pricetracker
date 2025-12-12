@@ -23,6 +23,7 @@ model User {
 
   emailNotifications Boolean @default(true)
   whatsappNotifications Boolean @default(false)
+  whatsappPhone String? // WhatsApp phone number with country code
   smsNotifications Boolean @default(false)
   
   telegramChatId       String?

@@ -73,6 +73,11 @@ export async function POST(req: Request) {
                 currency: scrapedData.currency,
                 imageUrl: scrapedData.imageUrl,
                 isAvailable: scrapedData.isAvailable,
+                lastCheckedAt: new Date(),
+                // Set interval: 15 mins (900s) for Premium, 60 mins (3600s) for Free
+                checkInterval: isPremium ? 900 : 3600,
+                // Set next check time accordingly
+                nextCheckAt: new Date(Date.now() + (isPremium ? 900 : 3600) * 1000),
                 priceHistory: {
                     create: {
                         price: scrapedData.price,

@@ -5,6 +5,8 @@ import { prisma } from '@/lib/db/prisma';
 import { revalidatePath } from 'next/cache';
 
 export async function toggleNotification(type: 'email' | 'whatsapp' | 'sms', enabled: boolean) {
+    console.log('🔧 [SERVER] toggleNotification called:', { type, enabled });
+
     const session = await auth();
     let userEmail = session?.user?.email;
 
@@ -13,22 +15,40 @@ export async function toggleNotification(type: 'email' | 'whatsapp' | 'sms', ena
         if (firstUser) userEmail = firstUser.email;
     }
 
-    if (!userEmail) throw new Error('User not found');
+    if (!userEmail) {
+        console.error('❌ [SERVER] User not found');
+        throw new Error('User not found');
+    }
+
+    console.log('👤 [SERVER] User email:', userEmail);
 
     const updateData: any = {};
     if (type === 'email') updateData.emailNotifications = enabled;
     if (type === 'whatsapp') updateData.whatsappNotifications = enabled;
     if (type === 'sms') updateData.smsNotifications = enabled;
 
-    await prisma.user.update({
+    console.log('📝 [SERVER] Update data:', updateData);
+
+    const updatedUser = await prisma.user.update({
         where: { email: userEmail },
         data: updateData
     });
 
-    revalidatePath('/notifications');
+    console.log('✅ [SERVER] User updated:', {
+        email: updatedUser.email,
+        emailNotifications: updatedUser.emailNotifications
+    });
+
+    // Revalidate all relevant paths
+    revalidatePath('/dashboard/notifications');
+    revalidatePath('/dashboard');
+
+    console.log('🔄 [SERVER] Paths revalidated');
+
+    return { success: true };
 }
 
-export async function sendTestNotification(type: 'email' | 'whatsapp' | 'sms') {
+export async function sendTestNotification(type: 'email' | 'whatsapp' | 'sms' | 'telegram') {
     const session = await auth();
     let userEmail = session?.user?.email;
 
@@ -72,6 +92,37 @@ export async function sendTestNotification(type: 'email' | 'whatsapp' | 'sms') {
         } catch (error) {
             console.error('Failed to send test email:', error);
             // We'll still record it in the DB but log the error
+        }
+    } else if (type === 'telegram') {
+        try {
+            if (!user.telegramChatId) {
+                return { success: false, message: 'Telegram not connected' };
+            }
+
+            const botToken = process.env.TELEGRAM_BOT_TOKEN;
+            if (!botToken) {
+                return { success: false, message: 'Telegram bot not configured' };
+            }
+
+            const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: user.telegramChatId,
+                    text: `✅ Test Notification from Price Tracker AI!\n\nYour Telegram notifications are working correctly.\n\nSent at: ${new Date().toLocaleString()}`
+                })
+            });
+
+            const data = await response.json();
+            if (!data.ok) {
+                console.error('[TELEGRAM] Failed to send test message:', data);
+                return { success: false, message: 'Failed to send Telegram message' };
+            }
+
+            console.log(`[TELEGRAM] Sent test message to chat ${user.telegramChatId}`);
+        } catch (error) {
+            console.error('Failed to send test Telegram message:', error);
+            return { success: false, message: 'Failed to send Telegram message' };
         }
     }
 
