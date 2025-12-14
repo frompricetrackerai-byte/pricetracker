@@ -6,7 +6,7 @@
         },
         {
             "path": "/api/monitor/check-prices",
-            "schedule": "*/15 * * * *"
+            "schedule": "0 12 * * *"
         }
     ]
 }
