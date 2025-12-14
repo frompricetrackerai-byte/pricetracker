@@ -144,3 +144,26 @@ export async function updateUser(userId: string, data: UpdateUserData) {
         return { error: 'Failed to update user. Email might already exist.' };
     }
 }
+}
+
+export async function deleteUser(userId: string) {
+    const session = await auth();
+    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
+
+    if (!session?.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
+        return { error: 'Unauthorized' };
+    }
+
+    try {
+        await prisma.user.delete({
+            where: { id: userId },
+        });
+
+        revalidatePath('/admin/users');
+        revalidatePath('/dashboard/admin');
+        return { success: 'User deleted successfully' };
+    } catch (error) {
+        console.error('Delete user error:', error);
+        return { error: 'Failed to delete user. Ensure they have no dependent records.' };
+    }
+}
