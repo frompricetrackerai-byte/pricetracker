@@ -9,7 +9,14 @@ export function GoogleSignInButton() {
     const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
     const handleGoogleSignIn = () => {
-        signIn('google', { callbackUrl });
+        let finalCallbackUrl = callbackUrl;
+
+        // Force production URL if we are in production to avoid localhost redirects
+        if (process.env.NODE_ENV === 'production' && callbackUrl === '/dashboard') {
+            finalCallbackUrl = 'https://www.pricetracker.store/dashboard';
+        }
+
+        signIn('google', { callbackUrl: finalCallbackUrl });
     };
 
     return (
