@@ -51,7 +51,7 @@ export default function SignupForm() {
             {step === 'REGISTER' ? (
                 <>
                     <div className="mb-6">
-                        <GoogleSignInButton />
+                        <GoogleSignInButton text="Sign up with Google" />
                         <div className="relative my-4">
                             <div className="absolute inset-0 flex items-center">
                                 <span className="w-full border-t border-gray-200" />

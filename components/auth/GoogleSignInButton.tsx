@@ -4,7 +4,7 @@ import { signIn } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { useSearchParams } from 'next/navigation';
 
-export function GoogleSignInButton() {
+export function GoogleSignInButton({ text = 'Sign in with Google' }: { text?: string }) {
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get('callbackUrl') || '/dashboard';
 
@@ -43,7 +43,7 @@ export function GoogleSignInButton() {
                     fill="#EA4335"
                 />
             </svg>
-            Sign in with Google
+            {text}
         </Button>
     );
 }
