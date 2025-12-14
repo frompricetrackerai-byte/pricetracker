@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { prisma } from '@/lib/db/prisma';
 import Link from 'next/link';
@@ -44,13 +45,7 @@ export default async function DashboardPage() {
         }
     });
 
-    import { redirect } from 'next/navigation';
-    // ... imports ...
-
-    // ... inside component ...
     if (!user) {
-        // Session exists but user is missing from DB (Zombie session). 
-        // Force strict signout logic or redirect to login which will trigger re-auth.
         return redirect('/api/auth/signin');
     }
 
