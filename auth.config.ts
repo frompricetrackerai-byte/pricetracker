@@ -21,6 +21,12 @@ export const authConfig = {
                 if (!baseUrl && process.env.VERCEL_URL) {
                     baseUrl = `https://${process.env.VERCEL_URL}`;
                 }
+
+                // Fallback to hardcoded domain in production to prevent localhost redirects
+                if (!baseUrl && process.env.NODE_ENV === 'production') {
+                    baseUrl = 'https://www.pricetracker.store';
+                }
+
                 baseUrl = baseUrl || nextUrl.origin;
 
                 const loginUrl = new URL('/login', baseUrl);
