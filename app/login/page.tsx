@@ -62,7 +62,7 @@ export default function LoginPage() {
                 <div className="w-full md:w-1/2 p-12 flex flex-col justify-center relative bg-white">
 
                     <div className="mb-8">
-                        <h2 className="text-3xl font-bold text-slate-800 mb-2">Welcome Back</h2>
+                        <h2 className="text-3xl font-bold text-slate-800 mb-2">Welcome Back!</h2>
                         <p className="text-slate-500">Please enter your details to sign in.</p>
                     </div>
 
