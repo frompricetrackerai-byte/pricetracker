@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { registerUser, verifyOtpAndLogin } from '@/app/actions/auth-actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { GoogleSignInButton } from './GoogleSignInButton';
 
 export default function SignupForm() {
     const [step, setStep] = useState<'REGISTER' | 'VERIFY'>('REGISTER');
@@ -48,44 +49,59 @@ export default function SignupForm() {
     return (
         <div className="w-full">
             {step === 'REGISTER' ? (
-                <form action={handleRegister} className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Input id="name" name="name" placeholder="John Doe" required className="bg-gray-50 border-gray-200 focus:bg-white transition-all" />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" name="email" type="email" placeholder="m@example.com" required className="bg-gray-50 border-gray-200 focus:bg-white transition-all" />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="password">Password</Label>
-                        <Input
-                            id="password"
-                            name="password"
-                            type="password"
-                            required
-                            minLength={6}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="bg-gray-50 border-gray-200 focus:bg-white transition-all"
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="mobile">Mobile (Optional)</Label>
-                        <Input id="mobile" name="mobile" type="tel" placeholder="+91 9876543210" className="bg-gray-50 border-gray-200 focus:bg-white transition-all" />
-                    </div>
-
-                    <div className="pt-4 flex flex-col gap-4">
-                        <Button className="w-full bg-blue-600 hover:bg-blue-700 h-11 text-base font-semibold shadow-lg shadow-blue-200" disabled={loading}>
-                            {loading ? 'Sending OTP...' : 'Create Account'}
-                        </Button>
-                        <div className="text-center text-sm text-gray-500">
-                            Already have an account?{" "}
-                            <Link href="/login" className="font-semibold text-blue-600 hover:text-blue-700">
-                                Sign in
-                            </Link>
+                <>
+                    <div className="mb-6">
+                        <GoogleSignInButton />
+                        <div className="relative my-4">
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t border-gray-200" />
+                            </div>
+                            <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-white px-2 text-gray-400">
+                                    Or sign up with
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </form>
+                    <form action={handleRegister} className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="name">Name</Label>
+                            <Input id="name" name="name" placeholder="John Doe" required className="bg-gray-50 border-gray-200 focus:bg-white transition-all" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" name="email" type="email" placeholder="m@example.com" required className="bg-gray-50 border-gray-200 focus:bg-white transition-all" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                id="password"
+                                name="password"
+                                type="password"
+                                required
+                                minLength={6}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="bg-gray-50 border-gray-200 focus:bg-white transition-all"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="mobile">Mobile (Optional)</Label>
+                            <Input id="mobile" name="mobile" type="tel" placeholder="+91 9876543210" className="bg-gray-50 border-gray-200 focus:bg-white transition-all" />
+                        </div>
+
+                        <div className="pt-4 flex flex-col gap-4">
+                            <Button className="w-full bg-blue-600 hover:bg-blue-700 h-11 text-base font-semibold shadow-lg shadow-blue-200" disabled={loading}>
+                                {loading ? 'Sending OTP...' : 'Create Account'}
+                            </Button>
+                            <div className="text-center text-sm text-gray-500">
+                                Already have an account?{" "}
+                                <Link href="/login" className="font-semibold text-blue-600 hover:text-blue-700">
+                                    Sign in
+                                </Link>
+                            </div>
+                        </div>
+                    </form>
+                </>
             ) : (
                 <form action={handleVerify} className="space-y-6">
                     <div className="space-y-4">

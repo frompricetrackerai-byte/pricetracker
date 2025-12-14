@@ -2,6 +2,8 @@ import { prisma } from '@/lib/db/prisma';
 import { scrapeProduct } from '@/lib/scraping/playwright-scraper';
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { sendTelegramMessage } from '@/lib/telegram/client';
+import { sendPriceDropWhatsApp } from '@/lib/notifications/whatsapp';
 
 // Email transporter
 const transporter = nodemailer.createTransport({
@@ -13,7 +15,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-async function checkPrices() {
+export async function checkPrices() {
     const now = new Date();
 
     // Find products due for check
@@ -89,13 +91,36 @@ async function checkPrices() {
                         }
                     }
 
-                    // 2. WhatsApp Notification (Premium Only)
-                    if (product.user.whatsappNotifications && product.user.subscriptionTier === 'premium') {
-                        console.log(`[WhatsApp] Sending to ${product.user.mobile || 'User'}: ${message}`);
-                        // In reality, call Twilio/Meta API here
+                    // 2. Telegram Notification
+                    if (product.user.telegramChatId) {
+                        try {
+                            const telegramMessage = `📉 *Price Drop Alert!*\n\n*${product.title}*\n\nOld Price: ₹${oldPrice}\nNew Price: *₹${newPrice}*\n\n[View Product](${product.url})`;
+                            await sendTelegramMessage(telegramMessage, product.user.telegramChatId);
+                            console.log(`Telegram sent to ${product.user.telegramChatId}`);
+                        } catch (e) {
+                            console.error('Failed to send Telegram:', e);
+                        }
                     }
 
-                    // 3. SMS Notification (Premium Only)
+                    // 3. WhatsApp Notification (Premium Only)
+                    // Note: Using whatsappPhone as per schema, fallback to mobile if needed or just skip
+                    // The 'premium' check is usually enforced here or at subscription level. Keeping it as is.
+                    if (product.user.whatsappNotifications && product.user.whatsappPhone && product.user.subscriptionTier === 'premium') {
+                        try {
+                            console.log(`[WhatsApp] Sending to ${product.user.whatsappPhone}: ${message}`);
+                            await sendPriceDropWhatsApp(
+                                product.user.whatsappPhone,
+                                product.title || 'Product',
+                                `₹${oldPrice}`,
+                                `₹${newPrice}`,
+                                product.url
+                            );
+                        } catch (e) {
+                            console.error('Failed to send WhatsApp:', e);
+                        }
+                    }
+
+                    // 4. SMS Notification (Premium Only)
                     if (product.user.smsNotifications && product.user.subscriptionTier === 'premium') {
                         console.log(`[SMS] Sending to ${product.user.mobile || 'User'}: ${message}`);
                     }

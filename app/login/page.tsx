@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { authenticate } from '@/lib/actions';
-import { Facebook, Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
 
 function LoginButton() {
     const { pending } = useFormStatus();
@@ -126,6 +127,17 @@ export default function LoginPage() {
 
                         <LoginButton />
 
+                        <div className="relative my-6">
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t border-gray-200"></span>
+                            </div>
+                            <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-white px-2 text-gray-500">Or</span>
+                            </div>
+                        </div>
+
+                        <GoogleSignInButton text="Login with Google" />
+
                     </form>
 
                     <div className="mt-8 text-center">
@@ -135,17 +147,8 @@ export default function LoginPage() {
                         </Link>
                     </div>
 
-                    {/* Socials - Simple Icons */}
-                    <div className="mt-8 pt-6 border-t border-slate-100 flex justify-center gap-4">
-                        <button className="p-2 rounded-full bg-slate-100 hover:bg-white border border-transparent hover:border-slate-200 transition-all text-slate-600 hover:text-blue-600">
-                            <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" /></svg>
-                        </button>
-                        <button className="p-2 rounded-full bg-slate-100 hover:bg-white border border-transparent hover:border-slate-200 transition-all text-slate-600 hover:text-blue-800">
-                            <Facebook className="w-5 h-5" fill="currentColor" />
-                        </button>
-                    </div>
-
                 </div>
+
             </div>
         </div>
     );
