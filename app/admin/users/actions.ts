@@ -144,7 +144,7 @@ export async function updateUser(userId: string, data: UpdateUserData) {
         return { error: 'Failed to update user. Email might already exist.' };
     }
 }
-}
+
 
 export async function deleteUser(userId: string) {
     const session = await auth();
