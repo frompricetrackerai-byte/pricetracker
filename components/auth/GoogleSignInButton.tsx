@@ -14,6 +14,9 @@ export function GoogleSignInButton({ text = 'Sign in with Google' }: { text?: st
         // Force production URL if we are in production to avoid localhost redirects
         if (process.env.NODE_ENV === 'production' && callbackUrl === '/dashboard') {
             finalCallbackUrl = 'https://www.pricetracker.store/dashboard';
+        } else {
+            // Ensure local development uses relative path
+            finalCallbackUrl = callbackUrl;
         }
 
         signIn('google', { callbackUrl: finalCallbackUrl });

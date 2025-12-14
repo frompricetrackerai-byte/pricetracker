@@ -44,7 +44,15 @@ export default async function DashboardPage() {
         }
     });
 
-    if (!user) return <div>User not found</div>;
+    import { redirect } from 'next/navigation';
+    // ... imports ...
+
+    // ... inside component ...
+    if (!user) {
+        // Session exists but user is missing from DB (Zombie session). 
+        // Force strict signout logic or redirect to login which will trigger re-auth.
+        return redirect('/api/auth/signin');
+    }
 
     // Calculate Real Stats - Price Drops this month with details
     const priceDropNotifications = await prisma.notification.findMany({
