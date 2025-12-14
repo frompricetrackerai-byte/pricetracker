@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { useFormStatus } from 'react-dom';
 import { authenticate } from '@/lib/actions';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
@@ -136,7 +136,9 @@ export default function LoginPage() {
                             </div>
                         </div>
 
-                        <GoogleSignInButton text="Login with Google" />
+                        <Suspense fallback={<div className="h-12 bg-slate-100 rounded-lg animate-pulse" />}>
+                            <GoogleSignInButton text="Login with Google" />
+                        </Suspense>
 
                     </form>
 

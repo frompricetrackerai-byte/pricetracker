@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -51,7 +51,9 @@ export default function SignupForm() {
             {step === 'REGISTER' ? (
                 <>
                     <div className="mb-6">
-                        <GoogleSignInButton text="Sign up with Google" />
+                        <Suspense fallback={<div className="h-12 bg-slate-100 rounded-lg animate-pulse" />}>
+                            <GoogleSignInButton text="Sign up with Google" />
+                        </Suspense>
                         <div className="relative my-4">
                             <div className="absolute inset-0 flex items-center">
                                 <span className="w-full border-t border-gray-200" />
