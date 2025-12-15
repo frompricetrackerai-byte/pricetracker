@@ -155,23 +155,23 @@ export default async function DashboardPage() {
     };
 
     return (
-        <main className="space-y-8 p-6 bg-slate-50/50 min-h-screen">
+        <main className="space-y-6 md:space-y-8 p-4 md:p-6 bg-slate-50/50 min-h-screen">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-4xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient-x">
+                    <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent animate-gradient-x">
                         Dashboard
                     </h1>
-                    <p className="text-gray-600 mt-2 font-medium">Welcome back, {user.name || 'User'}! Here's your savings overview.</p>
+                    <p className="text-gray-600 mt-2 font-medium text-sm md:text-base">Welcome back, {user.name || 'User'}! Here's your savings overview.</p>
                 </div>
-                <div className="flex gap-3">
-                    <Link href="/dashboard/notifications">
-                        <Button variant="outline" className="border-2 border-purple-200 hover:bg-purple-50 text-purple-700">
+                <div className="flex gap-3 w-full md:w-auto">
+                    <Link href="/dashboard/notifications" className="flex-1 md:flex-none">
+                        <Button variant="outline" className="w-full md:w-auto border-2 border-purple-200 hover:bg-purple-50 text-purple-700">
                             <Bell className="mr-2 h-4 w-4" /> Notifications
                         </Button>
                     </Link>
-                    <Link href="/dashboard/products/add">
-                        <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/30 transition-all hover:scale-105">
+                    <Link href="/dashboard/products/add" className="flex-1 md:flex-none">
+                        <Button size="lg" className="w-full md:w-auto bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/30 transition-all hover:scale-105">
                             <Plus className="mr-2 h-5 w-5" /> Add Product
                         </Button>
                     </Link>
@@ -245,8 +245,8 @@ export default async function DashboardPage() {
             />
 
             {/* Recent Products */}
-            <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
-                <div className="flex items-center justify-between mb-8">
+            <div className="bg-white rounded-3xl p-5 md:p-8 shadow-xl border border-gray-100">
+                <div className="flex items-center justify-between mb-6 md:mb-8">
                     <div>
                         <h2 className="text-2xl font-bold text-gray-900">Recent Products</h2>
                         <p className="text-gray-500 text-sm mt-1">Tracked items and their current status</p>

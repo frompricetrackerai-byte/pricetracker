@@ -39,7 +39,7 @@ export default function Sidebar() {
                     <h1 className="text-xl font-black tracking-tight">Price Tracker AI</h1>
                 </div>
             </Link>
-            <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
+            <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
                 {links.map((link) => {
                     const LinkIcon = link.icon;
                     return (
@@ -47,13 +47,13 @@ export default function Sidebar() {
                             key={link.name}
                             href={link.href}
                             className={cn(
-                                'flex h-[52px] grow items-center justify-center gap-3 rounded-xl bg-white/50 p-3 text-sm font-medium text-slate-600 transition-all hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:shadow-sm md:flex-none md:justify-start md:p-3 md:px-4',
+                                'flex h-[52px] min-w-[52px] md:w-auto grow items-center justify-center gap-3 rounded-xl bg-white/60 backdrop-blur-sm border border-white/40 p-3 text-sm font-medium text-slate-600 transition-all hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:text-blue-600 hover:shadow-sm md:flex-none md:justify-start md:p-3 md:px-4',
                                 {
-                                    'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md hover:from-blue-600 hover:to-indigo-600 hover:text-white': pathname === link.href,
+                                    'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20 border-transparent hover:from-blue-700 hover:to-indigo-700 hover:text-white': pathname === link.href,
                                 },
                             )}
                         >
-                            <LinkIcon className="w-5" />
+                            <LinkIcon className="w-5 h-5" />
                             <p className="hidden md:block">{link.name}</p>
                         </Link>
                     );

@@ -166,7 +166,7 @@ export default function StatsCardsWrapper({
             </div>
 
             {/* Shared expansion area BELOW all cards */}
-            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${expandedCard ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className={`overflow-hidden transition-all duration-300 ease-in-out ${expandedCard ? 'max-h-[800px] opacity-100' : 'max-h-0 opacity-0'}`}>
                 {/* Alerts Panel */}
                 {expandedCard === 'alerts' && (
                     <div className="bg-white rounded-xl border-2 border-green-200 shadow-lg p-6">
