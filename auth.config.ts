@@ -16,7 +16,6 @@ export const authConfig = {
                 // Priority:
                 // 1. AUTH_URL (Explicit Production override)
                 // 2. VERCEL_URL (Automatic for Vercel Previews/Deployments) - Note: Vercel doesn't include https://
-                // 3. nextUrl.origin (Localhost fallback)
                 let baseUrl = process.env.AUTH_URL;
 
                 // VERCEL_URL handling (only if not localhost/development)
@@ -32,11 +31,16 @@ export const authConfig = {
 
                 baseUrl = baseUrl || nextUrl.origin;
 
-                // SAFARI/BUILD FIX: Validate baseUrl before using
+                // PARANOID/BUILD FIX: Validate baseUrl before using
                 try {
-                    new URL(baseUrl);
+                    const testUrl = new URL(baseUrl);
+                    // Ensure protocol is http or https
+                    if (testUrl.protocol !== 'http:' && testUrl.protocol !== 'https:') {
+                        throw new Error('Invalid protocol');
+                    }
                 } catch (e) {
-                    baseUrl = nextUrl.origin; // Fallback to current origin if constructed URL is invalid
+                    // Critical fallback for static build or invalid vars
+                    baseUrl = 'http://localhost:3000';
                 }
 
                 const loginUrl = new URL('/login', baseUrl);
