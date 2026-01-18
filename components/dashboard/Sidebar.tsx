@@ -19,19 +19,14 @@ const links = [
 export default function Sidebar() {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com')
-        .split(',')
-        .map(e => e.trim().toLowerCase());
-
-    const userEmail = session?.user?.email?.toLowerCase();
-    const isAdmin = userEmail && ADMIN_EMAILS.includes(userEmail);
+    // @ts-ignore
+    const isAdmin = session?.user?.isAdmin;
 
     // DEBUG: Log to console so user can see what's happening
     if (session?.user?.email) {
         console.log("--- ADMIN CHECK DEBUG ---");
         console.log("Logged in:", session.user.email);
-        console.log("Allowed Admins:", ADMIN_EMAILS);
-        console.log("Match Found:", isAdmin);
+        console.log("Is Admin (from session):", isAdmin);
     }
 
     return (

@@ -10,14 +10,9 @@ export const dynamic = 'force-dynamic';
 export default async function AdminUsersPage() {
     const session = await auth()
 
-    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com')
-        .split(',')
-        .map(e => e.trim().toLowerCase());
-
-    const userEmail = session?.user?.email?.toLowerCase();
-
-    if (userEmail && !ADMIN_EMAILS.includes(userEmail)) {
-        console.log(`[Admin Access Denied] ${userEmail} is not in ${ADMIN_EMAILS}`);
+    // @ts-ignore
+    if (!session?.user?.isAdmin) {
+        console.log(`[Admin Access Denied] ${session?.user?.email} is not an admin`);
         redirect("/dashboard");
     }
 

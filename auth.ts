@@ -52,19 +52,30 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     ],
     callbacks: {
         async jwt({ token, user }) {
+            const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com')
+                .split(',')
+                .map(e => e.trim().toLowerCase());
+
             if (user) {
                 token.id = user.id;
-                // Add custom fields to token
                 // @ts-ignore
                 token.subscriptionTier = user.subscriptionTier;
+
+                if (user.email) {
+                    // @ts-ignore
+                    token.isAdmin = ADMIN_EMAILS.includes(user.email.toLowerCase());
+                }
             }
             return token;
         },
         async session({ session, token }) {
             if (token && session.user) {
+                // @ts-ignore
                 session.user.id = token.id as string;
                 // @ts-ignore
                 session.user.subscriptionTier = token.subscriptionTier as string;
+                // @ts-ignore
+                session.user.isAdmin = token.isAdmin as boolean;
             }
             return session;
         },
