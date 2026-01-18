@@ -2,10 +2,8 @@ import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 import Razorpay from 'razorpay';
 
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID!,
-    key_secret: process.env.RAZORPAY_KEY_SECRET!,
-});
+// Razorpay instance will be initialized inside the handler
+// const razorpay = new Razorpay({ ... });
 
 export async function POST(req: Request) {
     try {
@@ -13,6 +11,11 @@ export async function POST(req: Request) {
         if (!session?.user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
+
+        const razorpay = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY_ID!,
+            key_secret: process.env.RAZORPAY_KEY_SECRET!,
+        });
 
         const options = {
             amount: 99900, // ₹999 in paise
