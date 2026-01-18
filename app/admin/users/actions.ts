@@ -57,10 +57,11 @@ export async function createUser(formData: FormData) {
 
         // Send Welcome email for manually created users
         try {
-            const { sendWelcomeEmail } = await import('@/lib/mail/send-welcome');
+            const { sendWelcomeEmail, sendAdminNewUserAlert } = await import('@/lib/mail/send-welcome');
             sendWelcomeEmail(email, name);
+            sendAdminNewUserAlert(email, name);
         } catch (e) {
-            console.error('Failed to send welcome email for manual user:', e);
+            console.error('Failed to send emails for manual user:', e);
         }
 
         revalidatePath('/admin/users');
