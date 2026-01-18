@@ -8,6 +8,14 @@ export const authConfig = {
         authorized({ auth, request: { nextUrl } }) {
             const isLoggedIn = !!auth?.user;
             console.log(`[Middleware] Path: ${nextUrl.pathname}, IsLoggedIn: ${isLoggedIn}, User: ${auth?.user?.email}`);
+
+            // DEBUG: Print Env Vars during build/runtime
+            if (process.env.NODE_ENV === 'production') {
+                console.log('DEBUG_ENV: VERCEL_URL=', process.env.VERCEL_URL);
+                console.log('DEBUG_ENV: AUTH_URL=', process.env.AUTH_URL);
+                console.log('DEBUG_ENV: NEXTAUTH_URL=', process.env.NEXTAUTH_URL);
+            }
+
             const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
 
             if (isOnDashboard) {
