@@ -19,12 +19,14 @@ export const authConfig = {
                 let baseUrl = process.env.AUTH_URL;
 
                 // VERCEL_URL handling (only if not localhost/development)
-                // We avoid template literals to prevent hidden character issues
+                // TEMPORARILY DISABLED TO DEBUG BUILD ERROR
+                /*
                 const vercelEnvUrl = process.env.VERCEL_URL;
                 if (!baseUrl && vercelEnvUrl && !vercelEnvUrl.includes('localhost')) {
-                    // Manually construct to be safe
-                    baseUrl = 'https://' + vercelEnvUrl;
+                     // Manually construct to be safe
+                     baseUrl = 'https://' + vercelEnvUrl;
                 }
+                */
 
                 // Fallback to hardcoded domain in production to prevent localhost redirects
                 if (!baseUrl && process.env.NODE_ENV === 'production') {
