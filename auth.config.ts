@@ -47,7 +47,7 @@ export const authConfig = {
                 }
 
                 // Fallback to hardcoded domain in production to prevent localhost redirects
-                if (!baseUrl && process.env.NODE_ENV === 'production') {
+                if (!baseUrl && process.env.NODE_ENV === 'production' && !nextUrl.hostname.includes('localhost')) {
                     baseUrl = 'https://www.pricetracker.store';
                 }
 
