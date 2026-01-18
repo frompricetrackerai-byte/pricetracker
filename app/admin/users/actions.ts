@@ -73,9 +73,8 @@ export async function createUser(formData: FormData) {
 
 export async function resetUserPassword(userId: string, newPassword: string) {
     const session = await auth();
-    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
-
-    if (!session?.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
+    // @ts-ignore
+    if (!session?.user?.isAdmin) {
         return { error: 'Unauthorized' };
     }
 
@@ -110,9 +109,8 @@ type UpdateUserData = {
 
 export async function updateUser(userId: string, data: UpdateUserData) {
     const session = await auth();
-    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
-
-    if (!session?.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
+    // @ts-ignore
+    if (!session?.user?.isAdmin) {
         return { error: 'Unauthorized' };
     }
 
@@ -155,9 +153,8 @@ export async function updateUser(userId: string, data: UpdateUserData) {
 
 export async function deleteUser(userId: string) {
     const session = await auth();
-    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
-
-    if (!session?.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
+    // @ts-ignore
+    if (!session?.user?.isAdmin) {
         return { error: 'Unauthorized' };
     }
 
