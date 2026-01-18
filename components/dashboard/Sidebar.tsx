@@ -19,15 +19,20 @@ const links = [
 export default function Sidebar() {
     const pathname = usePathname();
     const { data: session } = useSession();
-    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
+    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com')
+        .split(',')
+        .map(e => e.trim().toLowerCase());
 
-    // DEBUG: Check what email the session has vs what looks like an admin
+    const userEmail = session?.user?.email?.toLowerCase();
+    const isAdmin = userEmail && ADMIN_EMAILS.includes(userEmail);
+
+    // DEBUG: Log to console so user can see what's happening
     if (session?.user?.email) {
-        console.log("Current Session Email:", session.user.email);
-        console.log("Is Admin?", ADMIN_EMAILS.includes(session.user.email));
+        console.log("--- ADMIN CHECK DEBUG ---");
+        console.log("Logged in:", session.user.email);
+        console.log("Allowed Admins:", ADMIN_EMAILS);
+        console.log("Match Found:", isAdmin);
     }
-
-    const isAdmin = session?.user?.email && ADMIN_EMAILS.includes(session.user.email);
 
     return (
         <div className="flex h-full flex-col px-3 py-4 md:px-2">
