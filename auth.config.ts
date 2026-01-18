@@ -15,13 +15,15 @@ export const authConfig = {
 
                 // Priority:
                 // 1. AUTH_URL (Explicit Production override)
-                // 2. VERCEL_URL (Automatic for Vercel Previews/Deployments) - Note: Vercel doesn't include https://
+                // 2. VERCEL_URL (Automatic for Vercel Previews/Deployments)
                 let baseUrl = process.env.AUTH_URL;
 
                 // VERCEL_URL handling (only if not localhost/development)
-                const vercelUrl = process.env.VERCEL_URL;
-                if (!baseUrl && vercelUrl && vercelUrl.includes('.') && !vercelUrl.includes('localhost')) {
-                    baseUrl = `https://${vercelUrl}`;
+                // We avoid template literals to prevent hidden character issues
+                const vercelEnvUrl = process.env.VERCEL_URL;
+                if (!baseUrl && vercelEnvUrl && !vercelEnvUrl.includes('localhost')) {
+                    // Manually construct to be safe
+                    baseUrl = 'https://' + vercelEnvUrl;
                 }
 
                 // Fallback to hardcoded domain in production to prevent localhost redirects
@@ -29,7 +31,10 @@ export const authConfig = {
                     baseUrl = 'https://www.pricetracker.store';
                 }
 
-                baseUrl = baseUrl || nextUrl.origin;
+                // Default local fallback
+                if (!baseUrl) {
+                    baseUrl = nextUrl.origin;
+                }
 
                 // PARANOID/BUILD FIX: Validate baseUrl before using
                 try {
@@ -40,6 +45,7 @@ export const authConfig = {
                     }
                 } catch (e) {
                     // Critical fallback for static build or invalid vars
+                    // This guarantees build cannot crash on invalid URL
                     baseUrl = 'http://localhost:3000';
                 }
 
