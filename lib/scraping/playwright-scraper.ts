@@ -195,8 +195,17 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
                 headers: {
                     'User-Agent': userAgents[0],
                     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-                    'Accept-Language': 'en-US,en;q=0.9'
-                }
+                    'Accept-Language': 'en-US,en;q=0.9',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Connection': 'keep-alive',
+                    'Upgrade-Insecure-Requests': '1',
+                    'Sec-Fetch-Dest': 'document',
+                    'Sec-Fetch-Mode': 'navigate',
+                    'Sec-Fetch-Site': 'none',
+                    'Sec-Fetch-User': '?1',
+                    'Cache-Control': 'max-age=0'
+                },
+                timeout: 15000 // 15s timeout to trigger fallback if blocked/slow
             });
             $ = cheerio.load(data);
 
@@ -399,10 +408,10 @@ export async function scrapeProduct(url: string): Promise<ScrapedProduct | null>
                 outOfStock: ['[data-testid="out-of-stock-msg"]']
             },
             flipkart: {
-                price: ['div._30jeq3._16Jk6d', 'div._30jeq3', '._1vC4OE._2rQ-NK'],
-                title: ['span.B_NuCI', 'h1._9E25nV'],
-                image: ['img._396cs4', 'img._2r_T1I'],
-                outOfStock: ['div._16FRp0']
+                price: ['div.Nx9bqj.CxhGGd', 'div.Nx9bqj', 'div._30jeq3._16Jk6d', 'div._30jeq3', '._1vC4OE._2rQ-NK'],
+                title: ['span.VU-ZEz', 'span.B_NuCI', 'h1._9E25nV', '.B_NuCI'],
+                image: ['img.DByuf4', 'img._396cs4', 'img._2r_T1I'],
+                outOfStock: ['div._16FRp0', 'button._2KpZ6l._2U9uOA._3v1-ww']
             },
             ebay: {
                 price: ['[data-testid="x-price-primary"]', '.x-price-primary', '#prcIsum', '.vi-price'],
@@ -574,7 +583,7 @@ async function scrapeWithPlaywright(url: string): Promise<ScrapedProduct | null>
             } catch (e) { }
         }
 
-        const title = await page.title();
+        let title = await page.title();
 
         // Try strict selectors first
         let priceText = '';
@@ -595,6 +604,25 @@ async function scrapeWithPlaywright(url: string): Promise<ScrapedProduct | null>
             }
 
             const imgEl = await page.locator('img[data-listing-card-listing-image]').first();
+            if (await imgEl.count() > 0) {
+                image = await imgEl.getAttribute('src') || '';
+            }
+        }
+
+        // Flipkart Specifics
+        if (url.includes('flipkart.com')) {
+            const priceEl = await page.locator('div.Nx9bqj.CxhGGd, div.Nx9bqj, div._30jeq3._16Jk6d').first();
+            if (await priceEl.count() > 0) {
+                priceText = await priceEl.innerText();
+            }
+
+            const titleEl = await page.locator('span.VU-ZEz, span.B_NuCI, h1._9E25nV').first();
+            if (await titleEl.count() > 0) {
+                const t = await titleEl.innerText();
+                if (t) title = t;
+            }
+
+            const imgEl = await page.locator('img.DByuf4, img._396cs4, img._2r_T1I').first();
             if (await imgEl.count() > 0) {
                 image = await imgEl.getAttribute('src') || '';
             }
