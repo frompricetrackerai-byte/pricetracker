@@ -29,6 +29,13 @@ export const authConfig = {
 
                 baseUrl = baseUrl || nextUrl.origin;
 
+                // SAFARI/BUILD FIX: Validate baseUrl before using
+                try {
+                    new URL(baseUrl);
+                } catch (e) {
+                    baseUrl = nextUrl.origin; // Fallback to current origin if constructed URL is invalid
+                }
+
                 const loginUrl = new URL('/login', baseUrl);
 
                 // Ensure callback URL is also correct
