@@ -22,6 +22,15 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
     trustHost: true,
     adapter: PrismaAdapter(prisma),
     session: { strategy: 'jwt' },
+    events: {
+        async createUser({ user }) {
+            if (user.email) {
+                const { sendWelcomeEmail, sendAdminNewUserAlert } = await import('@/lib/mail/send-welcome');
+                await sendWelcomeEmail(user.email, user.name || null);
+                await sendAdminNewUserAlert(user.email, user.name || null);
+            }
+        }
+    },
     providers: [
         Google({
             clientId: process.env.GOOGLE_CLIENT_ID,

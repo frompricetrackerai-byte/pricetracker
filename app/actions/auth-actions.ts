@@ -57,18 +57,23 @@ export async function verifyOtpAndLogin(email: string, otp: string, password?: s
 
     if (!token) return { error: 'Invalid or expired OTP' };
 
-    // Mark user verified
-    await prisma.user.update({
+    // Mark user verified and get details for email
+    const updatedUser = await prisma.user.update({
         where: { email },
-        data: { emailVerified: new Date() }
+        data: { emailVerified: new Date() },
+        select: { email: true, name: true }
     });
+
+    // Send Welcome Emails (Don't wait/block the UI)
+    if (updatedUser.email) {
+        const { sendWelcomeEmail, sendAdminNewUserAlert } = await import('@/lib/mail/send-welcome');
+        sendWelcomeEmail(updatedUser.email, updatedUser.name);
+        sendAdminNewUserAlert(updatedUser.email, updatedUser.name);
+    }
 
     // Clean up token
     await prisma.verificationToken.delete({ where: { identifier_token: { identifier: email, token: otp } } });
 
-    // Attempt Login
-    // Note: We can't use signIn credentials directly here easily because it expects form data or redirects.
-    // Ideally the UI handles the sign in call after verification success.
     return { success: true };
 }
 

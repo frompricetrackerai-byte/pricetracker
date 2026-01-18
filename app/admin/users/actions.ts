@@ -16,9 +16,8 @@ const CreateUserSchema = z.object({
 
 export async function createUser(formData: FormData) {
     const session = await auth();
-    const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || 'admin@example.com').split(',').map(e => e.trim());
-
-    if (!session?.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
+    // @ts-ignore
+    if (!session?.user?.isAdmin) {
         return { error: 'Unauthorized' };
     }
 
@@ -55,6 +54,14 @@ export async function createUser(formData: FormData) {
                     : null,
             },
         });
+
+        // Send Welcome email for manually created users
+        try {
+            const { sendWelcomeEmail } = await import('@/lib/mail/send-welcome');
+            sendWelcomeEmail(email, name);
+        } catch (e) {
+            console.error('Failed to send welcome email for manual user:', e);
+        }
 
         revalidatePath('/admin/users');
         return { success: 'User created successfully' };

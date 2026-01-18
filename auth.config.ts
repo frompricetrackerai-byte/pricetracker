@@ -38,7 +38,12 @@ export const authConfig = {
                 // CRITICAL BUILD FIX: Force hardcoded URL in production
                 // This bypasses any potential "Invalid URL" issues from environment variables
                 if (process.env.NODE_ENV === 'production') {
-                    baseUrl = 'https://www.pricetracker.store';
+                    // Use the current origin if it's our domain, otherwise default to full URL
+                    if (nextUrl.hostname.includes('pricetracker.store')) {
+                        baseUrl = nextUrl.origin;
+                    } else {
+                        baseUrl = 'https://www.pricetracker.store';
+                    }
                 }
 
                 // Fallback to hardcoded domain in production to prevent localhost redirects
