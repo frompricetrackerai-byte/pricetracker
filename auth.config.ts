@@ -19,7 +19,10 @@ export const authConfig = {
                 // 3. nextUrl.origin (Localhost fallback)
                 let baseUrl = process.env.AUTH_URL;
                 if (!baseUrl && process.env.VERCEL_URL) {
-                    baseUrl = `https://${process.env.VERCEL_URL}`;
+                    // Ensure VERCEL_URL is not empty or just whitespace
+                    if (process.env.VERCEL_URL.trim() !== '') {
+                        baseUrl = `https://${process.env.VERCEL_URL}`;
+                    }
                 }
 
                 // Fallback to hardcoded domain in production to prevent localhost redirects
