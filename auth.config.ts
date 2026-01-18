@@ -24,17 +24,21 @@ export const authConfig = {
                 // Priority:
                 // 1. AUTH_URL (Explicit Production override)
                 // 2. VERCEL_URL (Automatic for Vercel Previews/Deployments)
-                let baseUrl = process.env.AUTH_URL;
-
+                /*
                 // VERCEL_URL handling (only if not localhost/development)
                 // TEMPORARILY DISABLED TO DEBUG BUILD ERROR
-                /*
                 const vercelEnvUrl = process.env.VERCEL_URL;
                 if (!baseUrl && vercelEnvUrl && !vercelEnvUrl.includes('localhost')) {
                      // Manually construct to be safe
                      baseUrl = 'https://' + vercelEnvUrl;
                 }
                 */
+
+                // CRITICAL BUILD FIX: Force hardcoded URL in production
+                // This bypasses any potential "Invalid URL" issues from environment variables
+                if (process.env.NODE_ENV === 'production') {
+                    baseUrl = 'https://www.pricetracker.store';
+                }
 
                 // Fallback to hardcoded domain in production to prevent localhost redirects
                 if (!baseUrl && process.env.NODE_ENV === 'production') {
