@@ -18,11 +18,11 @@ export const authConfig = {
                 // 2. VERCEL_URL (Automatic for Vercel Previews/Deployments) - Note: Vercel doesn't include https://
                 // 3. nextUrl.origin (Localhost fallback)
                 let baseUrl = process.env.AUTH_URL;
-                if (!baseUrl && process.env.VERCEL_URL) {
-                    // Ensure VERCEL_URL is not empty or just whitespace
-                    if (process.env.VERCEL_URL.trim() !== '') {
-                        baseUrl = `https://${process.env.VERCEL_URL}`;
-                    }
+
+                // VERCEL_URL handling (only if not localhost/development)
+                const vercelUrl = process.env.VERCEL_URL;
+                if (!baseUrl && vercelUrl && vercelUrl.includes('.') && !vercelUrl.includes('localhost')) {
+                    baseUrl = `https://${vercelUrl}`;
                 }
 
                 // Fallback to hardcoded domain in production to prevent localhost redirects
