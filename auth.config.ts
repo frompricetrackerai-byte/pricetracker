@@ -24,6 +24,7 @@ export const authConfig = {
                 // Priority:
                 // 1. AUTH_URL (Explicit Production override)
                 // 2. VERCEL_URL (Automatic for Vercel Previews/Deployments)
+                let baseUrl = process.env.AUTH_URL;
                 /*
                 // VERCEL_URL handling (only if not localhost/development)
                 // TEMPORARILY DISABLED TO DEBUG BUILD ERROR
