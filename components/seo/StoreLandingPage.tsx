@@ -141,24 +141,50 @@ export function StoreLandingPage({
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "SoftwareApplication",
-                        "name": `${storeName} Price Tracker`,
-                        "applicationCategory": "ShoppingApplication",
-                        "operatingSystem": "Web",
-                        "offers": {
-                            "@type": "Offer",
-                            "price": "0",
-                            "priceCurrency": "INR"
+                    __html: JSON.stringify([
+                        {
+                            "@context": "https://schema.org",
+                            "@type": "SoftwareApplication",
+                            "name": `${storeName} Price Tracker`,
+                            "applicationCategory": "ShoppingApplication",
+                            "operatingSystem": "Web",
+                            "url": `https://pricetracker.store/${storeName.toLowerCase().replace(/\s+/g, '-')}-price-tracker`,
+                            "offers": {
+                                "@type": "Offer",
+                                "price": "0",
+                                "priceCurrency": "INR"
+                            },
+                            "description": heroDescription,
+                            "aggregateRating": {
+                                "@type": "AggregateRating",
+                                "ratingValue": "4.9",
+                                "ratingCount": "250"
+                            },
+                            "author": {
+                                "@type": "Organization",
+                                "name": "Price Tracker AI",
+                                "url": "https://pricetracker.store"
+                            }
                         },
-                        "description": heroDescription,
-                        "aggregateRating": {
-                            "@type": "AggregateRating",
-                            "ratingValue": "4.9",
-                            "ratingCount": "250"
+                        {
+                            "@context": "https://schema.org",
+                            "@type": "BreadcrumbList",
+                            "itemListElement": [
+                                {
+                                    "@type": "ListItem",
+                                    "position": 1,
+                                    "name": "Home",
+                                    "item": "https://pricetracker.store"
+                                },
+                                {
+                                    "@type": "ListItem",
+                                    "position": 2,
+                                    "name": `${storeName} Price Tracker`,
+                                    "item": `https://pricetracker.store/${storeName.toLowerCase().replace(/\s+/g, '-')}-price-tracker`
+                                }
+                            ]
                         }
-                    })
+                    ])
                 }}
             />
         </div>

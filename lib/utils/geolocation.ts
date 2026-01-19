@@ -39,7 +39,7 @@ export async function detectUserCountryServer(): Promise<string> {
         }
         // Final fallback: use a public Geo-IP API (client IP detection)
         try {
-            const response = await fetch('https://ipapi.co/country_name/', { next: { revalidate: 3600 } });
+            const response = await fetch('https://ipapi.co/country/', { next: { revalidate: 3600 } });
             if (response.ok) {
                 const country = await response.text();
                 // If it returns a code like "IN" or "US", we use it

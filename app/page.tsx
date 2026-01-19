@@ -397,14 +397,14 @@ export default function LandingPage() {
             © 2024 Price Tracker AI. All rights reserved.
           </p>
           <nav className="flex gap-6">
-            <Link className="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors" href="#">
+            <Link className="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors" href="/faq">
+              FAQ
+            </Link>
+            <Link className="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors" href="/terms">
               Terms
             </Link>
-            <Link className="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors" href="#">
+            <Link className="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors" href="/privacy">
               Privacy
-            </Link>
-            <Link className="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors" href="#">
-              Contact
             </Link>
           </nav>
         </div>
@@ -414,24 +414,60 @@ export default function LandingPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "SoftwareApplication",
-            "name": "Price Tracker AI",
-            "applicationCategory": "ShoppingApplication",
-            "operatingSystem": "Web",
-            "offers": {
-              "@type": "Offer",
-              "price": "0",
-              "priceCurrency": "INR"
+          __html: JSON.stringify([
+            {
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "Price Tracker AI",
+              "alternateName": ["PriceTracker AI", "Price Tracker", "Amazon Price Tracker India"],
+              "applicationCategory": "ShoppingApplication",
+              "operatingSystem": "Web",
+              "url": "https://pricetracker.store",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "INR"
+              },
+              "description": "Never miss a price drop again. Track products from Amazon, Flipkart, Myntra, and Ajio. Get instant alerts via WhatsApp, Telegram, and Email when prices drop.",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "ratingCount": "1250"
+              },
+              "featureList": [
+                "Real-time price tracking",
+                "Multi-store support (Amazon, Flipkart, etc.)",
+                "WhatsApp and Telegram alerts",
+                "Price history charts",
+                "Unlimited tracking for premium users"
+              ]
             },
-            "description": "Track prices from Amazon, Flipkart, Myntra and get instant alerts on WhatsApp and Telegram.",
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "4.8",
-              "ratingCount": "1200"
+            {
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              "name": "Price Tracker AI",
+              "url": "https://pricetracker.store",
+              "logo": "https://pricetracker.store/favicon.ico",
+              "description": "A powerful AI-driven platform for tracking e-commerce prices and saving money online.",
+              "sameAs": [
+                "https://x.com/PriceTrackerAI"
+              ]
+            },
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Price Tracker AI",
+              "url": "https://pricetracker.store",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://pricetracker.store/?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+              }
             }
-          })
+          ])
         }}
       />
     </div>
