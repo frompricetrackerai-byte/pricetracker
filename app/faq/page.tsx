@@ -1,10 +1,52 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { HelpCircle, Bell, TrendingDown, Target, AlertCircle } from 'lucide-react';
 import Link from 'next/link';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Help & FAQ | Price Tracker AI',
+    description: 'Learn how to track prices, set target alerts, and get notified on WhatsApp and Telegram with Price Tracker AI. Frequently asked questions and guides.',
+    keywords: ['price tracker help', 'how to track prices', 'price alert settings', 'faq price tracker'],
+};
 
 export default function FAQPage() {
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How do price notifications work?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "We monitor your tracked products and send alerts via WhatsApp, Telegram, or Email only when the price drops below your set target or the previous recorded price."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is Notify on Any Price Drop?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "When enabled, you receive alerts for every single price decrease, regardless of your target price. This is ideal for catching minor sales."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "How does Target Price work?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "You set a specific price you are willing to pay. We only notify you when the actual price on the store hits or goes below your target value."
+                }
+            }
+        ]
+    };
+
     return (
         <div className="container mx-auto py-6 md:py-10 space-y-6 md:space-y-8 p-4 md:p-6">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
             <div className="text-center md:text-left">
                 <h1 className="text-3xl md:text-4xl font-black bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-transparent">
                     Help & FAQ
