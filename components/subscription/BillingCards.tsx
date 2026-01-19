@@ -27,7 +27,7 @@ export default function BillingCards({ isPremium, serverCurrency }: BillingCards
     // Base prices in INR
     const basePrices = {
         free: 0,
-        premiumOriginal: 999,
+        premiumOriginal: 499,
         premiumDiscounted: 99,
     };
 

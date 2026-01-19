@@ -290,7 +290,7 @@ export default function LandingPage() {
                 <div className="mb-6">
                   <div className="flex items-baseline gap-2">
                     <span className="text-4xl font-bold text-gray-900">$1.10</span>
-                    <span className="text-gray-400 line-through text-lg">$11</span>
+                    <span className="text-gray-400 line-through text-lg">$5.50</span>
                   </div>
                   <span className="text-gray-500">/month</span>
                 </div>
