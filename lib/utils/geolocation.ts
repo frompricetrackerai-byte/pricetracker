@@ -37,6 +37,29 @@ export async function detectUserCountryServer(): Promise<string> {
                 return match[1];
             }
         }
+        // Final fallback: use a public Geo-IP API (client IP detection)
+        try {
+            const response = await fetch('https://ipapi.co/country_name/', { next: { revalidate: 3600 } });
+            if (response.ok) {
+                const country = await response.text();
+                // If it returns a code like "IN" or "US", we use it
+                if (country && country.length === 2) {
+                    return country;
+                }
+                // If it returns full name, we might need mapping, but often these APIs have a /country/ endpoint for code
+            }
+
+            // Try another one if first fails: ipwho.is
+            const ipWhoResponse = await fetch('https://ipwho.is/', { next: { revalidate: 3600 } });
+            if (ipWhoResponse.ok) {
+                const data = await ipWhoResponse.json();
+                if (data && data.country_code) {
+                    return data.country_code;
+                }
+            }
+        } catch (e) {
+            console.error('External geo-IP fallback failed:', e);
+        }
     } catch (error) {
         console.error('Error detecting country:', error);
     }

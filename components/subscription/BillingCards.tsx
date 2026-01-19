@@ -28,7 +28,7 @@ export default function BillingCards({ isPremium, serverCurrency }: BillingCards
     const basePrices = {
         free: 0,
         premiumOriginal: 999,
-        premiumDiscounted: 499,
+        premiumDiscounted: 99,
     };
 
     // Convert prices to user's currency

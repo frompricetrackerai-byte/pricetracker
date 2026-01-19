@@ -3,7 +3,9 @@ import { prisma } from "@/lib/db/prisma"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import UserManagementTable from "@/components/admin/UserManagementTable"
-import { Shield, Users, Crown, UserCheck } from "lucide-react"
+import { Shield, Users, Crown, UserCheck, ShoppingCart, ArrowRight } from "lucide-react"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 export const dynamic = 'force-dynamic';
 
@@ -34,6 +36,8 @@ export default async function AdminUsersPage() {
     const premiumUsers = users.filter(u => u.subscriptionTier === 'premium').length
     const activeSubscriptions = users.filter(u => u.subscriptionStatus === 'active' && u.subscriptionTier === 'premium').length
 
+    const totalProducts = await prisma.product.count()
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -42,7 +46,14 @@ export default async function AdminUsersPage() {
                     <Shield className="h-8 w-8 text-purple-600" />
                     Admin Dashboard
                 </h1>
-                <p className="text-zinc-500 text-sm mt-1">Manage users and subscriptions.</p>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-1">
+                    <p className="text-zinc-500 text-sm">Manage users, subscriptions, and products.</p>
+                    <Link href="/dashboard/admin/tracking">
+                        <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 font-bold shadow-sm">
+                            <ShoppingCart className="mr-2 h-4 w-4" /> View Tracking Overview <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                    </Link>
+                </div>
             </div>
 
             {/* Stats Cards */}
@@ -87,6 +98,20 @@ export default async function AdminUsersPage() {
                             <div>
                                 <p className="text-3xl font-black text-gray-900">{activeSubscriptions}</p>
                                 <p className="text-sm text-zinc-500 font-medium">Active Subscriptions</p>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+                {/* Total Products Stat (New) */}
+                <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 shadow-md hover:shadow-lg transition-all hidden md:block">
+                    <CardContent className="p-5">
+                        <div className="flex items-center gap-4">
+                            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-white shadow-lg">
+                                <ShoppingCart className="h-6 w-6" />
+                            </div>
+                            <div>
+                                <p className="text-3xl font-black text-gray-900">{totalProducts}</p>
+                                <p className="text-sm text-zinc-500 font-medium">Tracked Products</p>
                             </div>
                         </div>
                     </CardContent>
