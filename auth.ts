@@ -29,6 +29,18 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
                 await sendWelcomeEmail(user.email, user.name || null);
                 await sendAdminNewUserAlert(user.email, user.name || null);
             }
+        },
+        async signIn({ user }) {
+            if (user.id) {
+                try {
+                    await prisma.user.update({
+                        where: { id: user.id },
+                        data: { lastLoginAt: new Date() }
+                    });
+                } catch (error) {
+                    console.error('Failed to update last login time:', error);
+                }
+            }
         }
     },
     providers: [

@@ -28,6 +28,7 @@ export default async function AdminUsersPage() {
             subscriptionTier: true,
             subscriptionStatus: true,
             subscriptionEndDate: true,
+            lastLoginAt: true,
         }
     })
 

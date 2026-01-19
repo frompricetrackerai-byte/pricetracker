@@ -21,6 +21,7 @@ type User = {
     subscriptionTier: string;
     subscriptionStatus: string;
     subscriptionEndDate: Date | null;
+    lastLoginAt?: Date | null;
 };
 
 type FilterType = 'all' | 'free' | 'premium';
@@ -279,6 +280,7 @@ export default function UserManagementTable({ users }: { users: User[] }) {
                             <TableHead>Mobile</TableHead>
                             <TableHead>Plan</TableHead>
                             <TableHead>Expires</TableHead>
+                            <TableHead>Last Seen</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -312,6 +314,11 @@ export default function UserManagementTable({ users }: { users: User[] }) {
                                         {user.subscriptionEndDate
                                             ? format(new Date(user.subscriptionEndDate), "PP")
                                             : "-"}
+                                    </TableCell>
+                                    <TableCell>
+                                        {user.lastLoginAt
+                                            ? format(new Date(user.lastLoginAt), "PP p")
+                                            : "Never"}
                                     </TableCell>
                                     <TableCell className="text-right">
                                         <div className="flex justify-end gap-1">

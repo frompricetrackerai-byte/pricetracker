@@ -20,6 +20,7 @@ model User {
   subscriptionStartDate DateTime?
   subscriptionEndDate DateTime?
   razorpayCustomerId String?
+  lastLoginAt DateTime?
 
   emailNotifications Boolean @default(true)
   whatsappNotifications Boolean @default(false)
